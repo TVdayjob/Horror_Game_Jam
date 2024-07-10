@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector]
     public bool canMove = true;
 
+    private float gravity = 20.0f;
+    private float verticalVelocity = 0;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -31,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         HandleMovement();
+        ApplyGravity();
         MoveCharacter();
         HandleCameraRotation();
     }
@@ -45,6 +49,20 @@ public class PlayerMovement : MonoBehaviour
         float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
 
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+    }
+
+    private void ApplyGravity()
+    {
+        if (characterController.isGrounded)
+        {
+            verticalVelocity = 0; // Reset vertical velocity when grounded
+        }
+        else
+        {
+            verticalVelocity -= gravity * Time.deltaTime; // Apply gravity
+        }
+
+        moveDirection.y = verticalVelocity;
     }
 
     private void MoveCharacter()
