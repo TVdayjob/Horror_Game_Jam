@@ -122,19 +122,16 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Initial arm rotation: " + initialArmRotation);
 
         // Prepare the arm for the attack (move back)
-        Vector3 attackPosition = initialArmPosition + new Vector3(-0.5f, 0, 0); // Adjust as needed
-        Quaternion attackRotation = initialArmRotation * Quaternion.Euler(0, 0, -30); // Adjust as needed
-
-        Debug.Log("Attack position: " + attackPosition);
-        Debug.Log("Attack rotation: " + attackRotation);
+        Vector3 attackPositionBack = initialArmPosition + new Vector3(-0.5f, 0, 0); // Adjust as needed
+        Quaternion attackRotationBack = initialArmRotation * Quaternion.Euler(0, 0, -30); // Adjust as needed
 
         // Move back
         float elapsedTime = 0;
         float attackDuration = 0.1f; // Adjust as needed
         while (elapsedTime < attackDuration)
         {
-            rightArm.localPosition = Vector3.Lerp(initialArmPosition, attackPosition, elapsedTime / attackDuration);
-            rightArm.localRotation = Quaternion.Slerp(initialArmRotation, attackRotation, elapsedTime / attackDuration);
+            rightArm.localPosition = Vector3.Lerp(initialArmPosition, attackPositionBack, elapsedTime / attackDuration);
+            rightArm.localRotation = Quaternion.Slerp(initialArmRotation, attackRotationBack, elapsedTime / attackDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -142,19 +139,32 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Moved back to attack position.");
 
         // Move forward to hit
+        Vector3 attackPositionForward = initialArmPosition + new Vector3(0.5f, 0, 0); // Adjust as needed
+        Quaternion attackRotationForward = initialArmRotation * Quaternion.Euler(0, 0, 30); // Adjust as needed
+
         elapsedTime = 0;
         attackDuration = 0.2f; // Adjust as needed
         while (elapsedTime < attackDuration)
         {
-            rightArm.localPosition = Vector3.Lerp(attackPosition, initialArmPosition, elapsedTime / attackDuration);
-            rightArm.localRotation = Quaternion.Slerp(attackRotation, initialArmRotation, elapsedTime / attackDuration);
+            rightArm.localPosition = Vector3.Lerp(attackPositionBack, attackPositionForward, elapsedTime / attackDuration);
+            rightArm.localRotation = Quaternion.Slerp(attackRotationBack, attackRotationForward, elapsedTime / attackDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        Debug.Log("Moved forward to hit.");
+        Debug.Log("Moved forward to hit position.");
 
         // Reset to initial position and rotation
+        elapsedTime = 0;
+        attackDuration = 0.1f; // Adjust as needed
+        while (elapsedTime < attackDuration)
+        {
+            rightArm.localPosition = Vector3.Lerp(attackPositionForward, initialArmPosition, elapsedTime / attackDuration);
+            rightArm.localRotation = Quaternion.Slerp(attackRotationForward, initialArmRotation, elapsedTime / attackDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
         rightArm.localPosition = initialArmPosition;
         rightArm.localRotation = initialArmRotation;
 
