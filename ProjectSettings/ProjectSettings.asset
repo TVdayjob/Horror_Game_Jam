@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: 7c02835d63113a145b1712fc28a60278
+  productGUID: cd5cd8326de2347dfaadcb2c13453e49
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: HorrorJam
+  productName: Horror_Game_Jam
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -677,14 +677,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: HorrorJam
+  metroPackageName: Horror_Game_Jam
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: HorrorJam
+  metroApplicationDescription: Horror_Game_Jam
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -754,11 +754,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 07220664-bdbf-43b1-9f47-34808da3d0bc
+  cloudProjectId: 08a25b56-87b7-4f93-af7a-23ac22ead597
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: HorrorJam
-  organizationId: bagjinhyeong640
+  projectName: Horror_Game_Jam 2024-07-06_02-54-44
+  organizationId: horror_game_jam
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
