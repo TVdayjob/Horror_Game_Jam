@@ -21,23 +21,32 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Vector3 rightArmOffset;
     [SerializeField] private Vector3 leftArmOffset;
 
+    [Header("Animator")]
+    [SerializeField] private Animator playerAnim;
+
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
-    private bool isRunning = false;
+    [HideInInspector] public bool isRunning = false;
+    [HideInInspector] public bool isMoving = false;
+    [HideInInspector] public bool isJumping = false;
+    [HideInInspector] public bool isStrafing = false;
 
     [HideInInspector]
     public bool canMove = true;
 
-    [HideInInspector]
-    public bool isAttacking = false;
-
     private float gravity = 20.0f;
+    [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
+    [HideInInspector] public bool isAttacking = false;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        if (playerAnim == null)
+        {
+            playerAnim = GetComponent<Animator>();
+        }
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -45,7 +54,6 @@ public class PlayerMovement : MonoBehaviour
         // Make sure the baseball bat is a child of the right arm
         baseballBat.SetParent(rightArm);
     }
-
     void Update()
     {
         HandleMovement();
@@ -69,7 +77,20 @@ public class PlayerMovement : MonoBehaviour
         float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
 
+        isStrafing = Mathf.Abs(Input.GetAxis("Horizontal")) > 0 && Mathf.Abs(Input.GetAxis("Vertical")) == 0;
+
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+
+        isMoving = moveDirection.magnitude > 0 && !isRunning && !isStrafing && !isRunning;
+
+        isJumping = characterController.isGrounded && Input.GetKey(KeyCode.Space);
+
+        if (isJumping)
+        {
+            verticalVelocity += jumpForce;
+            playerAnim.SetTrigger("jump");
+            characterController.Move(moveDirection * Time.deltaTime);
+        }
     }
 
     private void ApplyGravity()
