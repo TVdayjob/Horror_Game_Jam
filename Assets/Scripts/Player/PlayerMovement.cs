@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -31,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool isMoving = false;
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isStrafing = false;
+    [HideInInspector] public bool isAttacking = false;
+    [HideInInspector] public bool isHeavyAttacking = false;
 
     [HideInInspector]
     public bool canMove = true;
@@ -38,7 +39,6 @@ public class PlayerMovement : MonoBehaviour
     private float gravity = 20.0f;
     [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
-    [HideInInspector] public bool isAttacking = false;
 
     void Start()
     {
@@ -54,13 +54,14 @@ public class PlayerMovement : MonoBehaviour
         // Make sure the baseball bat is a child of the right arm
         baseballBat.SetParent(rightArm);
     }
+
     void Update()
     {
         HandleMovement();
         ApplyGravity();
         MoveCharacter();
         HandleCameraRotation();
-        HandleAttack();
+        HandleAttacks();
     }
 
     void LateUpdate()
@@ -123,69 +124,42 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HandleAttack()
+    private void HandleAttacks()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (Input.GetMouseButtonDown(0) && !isAttacking && !isHeavyAttacking)
         {
-            Debug.Log("Left mouse button clicked, initiating attack.");
-            StartCoroutine(Attack());
+            // Determine attack type based on input (for example, hold Shift for heavy attack)
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                StartCoroutine(HeavyAttack());
+            }
+            else
+            {
+                StartCoroutine(NormalAttack());
+            }
         }
     }
 
-    private IEnumerator Attack()
+    private IEnumerator NormalAttack()
     {
         isAttacking = true;
-        Debug.Log("Attack coroutine started.");
+        playerAnim.SetTrigger("normalAttack");
 
-        // Initial positions and rotations
-        Vector3 initialArmPosition = rightArm.localPosition;
-        Quaternion initialArmRotation = rightArm.localRotation;
-
-        Debug.Log("Initial arm position: " + initialArmPosition);
-        Debug.Log("Initial arm rotation: " + initialArmRotation);
-
-        // Prepare the arm for the attack (move back)
-        Vector3 attackPosition = initialArmPosition + new Vector3(-0.5f, 0, 0); // Adjust as needed
-        Quaternion attackRotation = initialArmRotation * Quaternion.Euler(0, 0, -30); // Adjust as needed
-
-        Debug.Log("Attack position: " + attackPosition);
-        Debug.Log("Attack rotation: " + attackRotation);
-
-        // Move back
-        float elapsedTime = 0;
-        float attackDuration = 0.1f; // Adjust as needed
-        while (elapsedTime < attackDuration)
-        {
-            rightArm.localPosition = Vector3.Lerp(initialArmPosition, attackPosition, elapsedTime / attackDuration);
-            rightArm.localRotation = Quaternion.Slerp(initialArmRotation, attackRotation, elapsedTime / attackDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        Debug.Log("Moved back to attack position.");
-
-        // Move forward to hit
-        elapsedTime = 0;
-        attackDuration = 0.2f; // Adjust as needed
-        while (elapsedTime < attackDuration)
-        {
-            Vector3 hitPosition = initialArmPosition + new Vector3(0.5f, 0, 0); // Further than the initial position
-            Quaternion hitRotation = initialArmRotation * Quaternion.Euler(0, 0, 30); // Adjust as needed
-
-            rightArm.localPosition = Vector3.Lerp(attackPosition, hitPosition, elapsedTime / attackDuration);
-            rightArm.localRotation = Quaternion.Slerp(attackRotation, hitRotation, elapsedTime / attackDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        Debug.Log("Moved forward to hit.");
-
-        // Reset to initial position and rotation
-        rightArm.localPosition = initialArmPosition;
-        rightArm.localRotation = initialArmRotation;
+        // Example attack animation coroutine
+        yield return new WaitForSeconds(0.5f); // Adjust timing based on your animation
 
         isAttacking = false;
-        Debug.Log("Attack coroutine finished.");
+    }
+
+    private IEnumerator HeavyAttack()
+    {
+        isHeavyAttacking = true;
+        playerAnim.SetTrigger("heavyAttack");
+
+        // Example heavy attack animation coroutine
+        yield return new WaitForSeconds(1.0f); // Adjust timing based on your animation
+
+        isHeavyAttacking = false;
     }
 
     private void AdjustArmPositions()
