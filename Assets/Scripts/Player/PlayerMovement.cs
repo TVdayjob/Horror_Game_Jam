@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -32,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool isMoving = false;
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isStrafing = false;
+    [HideInInspector] public bool isAttacking = false;
+    [HideInInspector] public bool isHeavyAttacking = false;
 
     [HideInInspector] public bool canMove = true;
 
@@ -46,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
     private float gravity = 20.0f;
     [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
-    
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -71,7 +71,6 @@ public class PlayerMovement : MonoBehaviour
             ApplyGravity();
             MoveCharacter();
             HandleCameraRotation();
-            HandleAttack();
         }
     }
 
