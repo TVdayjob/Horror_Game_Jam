@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
     [HideInInspector] public bool isRunning = false;
+    [HideInInspector] public bool playRunAnim = false;
     [HideInInspector] public bool isMoving = false;
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isStrafing = false;
@@ -84,7 +85,8 @@ public class PlayerMovement : MonoBehaviour
 
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        isMoving = moveDirection.magnitude > 0 && !isRunning && !isStrafing && !isRunning;
+        isMoving = moveDirection.magnitude > 0 && !isStrafing && !isRunning;
+        playRunAnim = isRunning && moveDirection.magnitude > 0;
 
         isJumping = characterController.isGrounded && Input.GetKey(KeyCode.Space);
 
