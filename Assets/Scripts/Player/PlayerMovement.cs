@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -40,6 +41,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
 
+    [Header("Item")]
+    public Inventory inventory;
+    public Transform handTransform;
+    private GameObject currentItemInHand;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -62,6 +68,8 @@ public class PlayerMovement : MonoBehaviour
         MoveCharacter();
         HandleCameraRotation();
         HandleAttacks();
+        HandleItemPickup();
+        HandleItemSelection();
     }
 
     void LateUpdate()
@@ -167,4 +175,50 @@ public class PlayerMovement : MonoBehaviour
         rightArm.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(rightArmOffset);
         leftArm.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(leftArmOffset);
     }
+
+    private void HandleItemPickup()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, 2f))
+            if (inventory.AddItem(hit.collider.GetComponent<Item>())) Debug.Log($"Picked up item: {hit.collider.GetComponent<Item>().itemName}");
+            else Debug.Log("Inventory is full.");
+    }
+
+
+    private void HandleItemSelection()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+            {
+                EquipItem(i);
+            }
+        }
+    }
+
+    private void EquipItem(int index)
+    {
+        Item item = inventory.GetItem(index);
+        if (item == null)
+        {
+            Debug.LogWarning($"No item found at index: {index}");
+            return;
+        }
+
+        // Destroy previous item in hand if exists
+        if (currentItemInHand != null)
+        {
+            Destroy(currentItemInHand);
+        }
+
+        // Instantiate new item in hand
+        currentItemInHand = Instantiate(item.gameObject, handTransform);
+        currentItemInHand.transform.localPosition = Vector3.zero;
+        currentItemInHand.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+        currentItemInHand.SetActive(true);
+
+        Debug.Log($"Equipped item: {item.itemName}");
+    }
+
+
+
 }
