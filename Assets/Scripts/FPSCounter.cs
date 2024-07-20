@@ -7,7 +7,7 @@ public class FPSCounter : MonoBehaviour
 {
     public TextMeshProUGUI FPSDisplay;
     private float time;
-    private float waitTime = 3f;
+    private float waitTime = 1f;
     private int frameCount;
 
     // Update is called once per frame

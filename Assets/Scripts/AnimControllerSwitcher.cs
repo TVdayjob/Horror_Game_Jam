@@ -45,7 +45,7 @@ public class AnimControllerSwitcher : MonoBehaviour
         {
             SwitchController(Moving);
         }
-        else if (playerMovement.isRunning)
+        else if (playerMovement.playRunAnim)
         {
             SwitchController(Running);
         }

@@ -27,14 +27,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
     [HideInInspector] public bool isRunning = false;
+    [HideInInspector] public bool playRunAnim = false;
     [HideInInspector] public bool isMoving = false;
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isStrafing = false;
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isHeavyAttacking = false;
 
-    [HideInInspector]
-    public bool canMove = true;
+    [HideInInspector] public bool canMove = true;
+
+    [HideInInspector] public Transform respawnPoint;
+
+    public GameObject gameMenuUI;
+    private GameMenu gameMenu;
 
     private float gravity = 20.0f;
     [SerializeField] private float jumpForce = 10;
@@ -43,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        gameMenu = gameMenuUI.GetComponent<GameMenu>();
         if (playerAnim == null)
         {
             playerAnim = GetComponent<Animator>();
@@ -57,11 +63,14 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
-        ApplyGravity();
-        MoveCharacter();
-        HandleCameraRotation();
-        HandleAttacks();
+        if (!gameMenu.isPaused)
+        {
+            HandleMovement();
+            ApplyGravity();
+            MoveCharacter();
+            HandleCameraRotation();
+            HandleAttack();
+        }
     }
 
     void LateUpdate()
@@ -82,7 +91,8 @@ public class PlayerMovement : MonoBehaviour
 
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        isMoving = moveDirection.magnitude > 0 && !isRunning && !isStrafing && !isRunning;
+        isMoving = moveDirection.magnitude > 0 && !isStrafing && !isRunning;
+        playRunAnim = isRunning && moveDirection.magnitude > 0;
 
         isJumping = characterController.isGrounded && Input.GetKey(KeyCode.Space);
 
