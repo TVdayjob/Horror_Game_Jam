@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HandleAttacks()
+    private void HandleAttack()
     {
         if (Input.GetMouseButtonDown(0) && !isAttacking && !isHeavyAttacking)
         {
