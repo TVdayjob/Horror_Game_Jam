@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class FloorManager : MonoBehaviour
@@ -7,13 +8,15 @@ public class FloorManager : MonoBehaviour
     public float floorHeight; // Height of each floor
     private GameObject[] floors = new GameObject[3];
     private int currentFloorIndex;
+    private int currentLevel;
 
     void Start()
     {
         // Initialize two floors: one at the player's level and one above
-        floors[0] = Instantiate(floorPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        floors[1] = Instantiate(floorPrefab, new Vector3(0, floorHeight, 0), Quaternion.identity);
+        floors[0] = InstantiateFloor(0);
+        floors[1] = InstantiateFloor(1);
         currentFloorIndex = 0;
+        currentLevel = 0;
     }
 
     void Update()
@@ -39,7 +42,7 @@ public class FloorManager : MonoBehaviour
         // Destroy the bottom floor if it exists
         if (currentFloorIndex == 0)
         {
-            floors[2] = Instantiate(floorPrefab, new Vector3(0, floors[1].transform.position.y + floorHeight, 0), Quaternion.identity);
+            floors[2] = InstantiateFloor(2);
             currentFloorIndex++;
         }
         else
@@ -51,9 +54,9 @@ public class FloorManager : MonoBehaviour
             floors[1] = floors[2];
 
             // Create a new floor above the current top floor
-            Vector3 newPosition = floors[2].transform.position + new Vector3(0, floorHeight, 0);
-            floors[2] = Instantiate(floorPrefab, newPosition, Quaternion.identity);
+            floors[2] = InstantiateFloor(2);
         }
+        currentLevel += 1;
     }
 
     void MoveFloorsDown()
@@ -69,11 +72,30 @@ public class FloorManager : MonoBehaviour
         Vector3 newPosition = floors[0].transform.position - new Vector3(0, floorHeight, 0);
         if (newPosition.y >= 0)
         {
-            floors[0] = Instantiate(floorPrefab, newPosition, Quaternion.identity);
+            floors[0] = InstantiateFloor(-2);
         }
         else
         {
             floors[0] = null; // No floor below
         }
+        currentLevel -= 1;
     }
+
+    GameObject InstantiateFloor(int levelOffset)
+    {
+        Vector3 position = new Vector3(0, (currentLevel + levelOffset) * floorHeight, 0);
+        GameObject newFloor = Instantiate(floorPrefab, position, Quaternion.identity);
+        SetLevelText(newFloor, currentLevel + levelOffset);
+        return newFloor;
+    }
+
+    void SetLevelText(GameObject floor, int level)
+    {
+        TextMeshPro levelText = floor.GetComponentInChildren<TextMeshPro>();
+        if (levelText != null)
+        {
+            levelText.text = "" + level;
+        }
+    }
+
 }
