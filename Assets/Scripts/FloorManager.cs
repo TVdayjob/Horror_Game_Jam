@@ -1,5 +1,7 @@
 using TMPro;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FloorManager : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class FloorManager : MonoBehaviour
     private GameObject[] floors = new GameObject[3];
     private int currentFloorIndex;
     private int currentLevel;
+    public GameObject enemyPrefab;
+    public int enemy_spawn_rate = 2;
 
     void Start()
     {
@@ -86,6 +90,8 @@ public class FloorManager : MonoBehaviour
         Vector3 position = new Vector3(0, (currentLevel + levelOffset) * floorHeight, 0);
         GameObject newFloor = Instantiate(floorPrefab, position, Quaternion.identity);
         SetLevelText(newFloor, currentLevel + levelOffset);
+        SpawnEnemiesOnFloor(newFloor); // Spawning enemies
+        BakeNavMesh(newFloor); // Baking NavMesh
         return newFloor;
     }
 
@@ -95,6 +101,39 @@ public class FloorManager : MonoBehaviour
         if (levelText != null)
         {
             levelText.text = "" + level;
+        }
+    }
+
+    void SpawnEnemiesOnFloor(GameObject floor)
+    {
+        Bounds floorBounds = floor.GetComponent<Renderer>().bounds;
+        for (int i = 0; i < enemy_spawn_rate; i++)
+        {
+            Vector3 randomPosition = new Vector3(
+                Random.Range(floorBounds.min.x, floorBounds.max.x),
+                floor.transform.position.y + 1, // Adjust the Y position to be above the floor
+                Random.Range(floorBounds.min.z, floorBounds.max.z)
+            );
+            GameObject enemy = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
+            enemy.transform.parent = floor.transform; // Parent the enemy to the floor
+        }
+    }
+
+
+    void BakeNavMesh(GameObject floor)
+    {
+        NavMeshSurface navMeshSurface = floor.GetComponent<NavMeshSurface>();
+        if (navMeshSurface != null)
+        {
+            navMeshSurface.BuildNavMesh();
+            foreach (Transform child in floor.transform)
+            {
+                NavMeshAgent agent = child.GetComponent<NavMeshAgent>();
+                if (agent != null)
+                {
+                    agent.enabled = true;
+                }
+            }
         }
     }
 

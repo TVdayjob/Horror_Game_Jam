@@ -105,15 +105,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 3
     agentTypeID: 0
-    agentRadius: 0.5
+    agentRadius: 1
     agentHeight: 2
-    agentSlope: 45
-    agentClimb: 0.4
+    agentSlope: 60
+    agentClimb: 1
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.16666667
+    cellSize: 0.33333334
     manualTileSize: 0
     tileSize: 256
     buildHeightMesh: 0
@@ -1905,7 +1905,7 @@ GameObject:
   m_Component:
   - component: {fileID: 651551778}
   - component: {fileID: 651551779}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stairwell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1939,9 +1939,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96fe28b63d689f24085b248520ff8812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorPrefab: {fileID: 20722804994003245, guid: 919a5b8ab5303ae4d89bf223c612050d, type: 3}
+  floorPrefab: {fileID: 1953295097252634956, guid: bb84b9117beb3b245a00992638c3706e, type: 3}
   player: {fileID: 22632586}
   floorHeight: 4
+  enemyPrefab: {fileID: 100116, guid: e22dcbd33214353499520516808ca0c3, type: 3}
+  enemy_spawn_rate: 1
 --- !u!1 &684905234
 GameObject:
   m_ObjectHideFlags: 0
@@ -4042,7 +4044,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1491476664969335343, guid: e400a9c1bb6e7417da502dd7d2821d99, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.01892348
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1491476664969335343, guid: e400a9c1bb6e7417da502dd7d2821d99, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4050,7 +4052,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1491476664969335343, guid: e400a9c1bb6e7417da502dd7d2821d99, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.43837076
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1491476664969335343, guid: e400a9c1bb6e7417da502dd7d2821d99, type: 3}
       propertyPath: m_LocalRotation.w
