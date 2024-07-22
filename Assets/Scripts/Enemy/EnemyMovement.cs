@@ -1,22 +1,30 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyMovement : MonoBehaviour
 {
-    private UnityEngine.AI.NavMeshAgent agent;
+    private NavMeshAgent agent;
     private Transform target;
 
     void Start()
     {
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            //Debug.LogError("NavMeshAgent component not found on " + gameObject.name);
+        }
     }
 
     public void SetTarget(Transform newTarget)
     {
-        target = newTarget;
-        StartCoroutine(UpdatePath());
+        if (newTarget != null && newTarget != this.transform) // Ensure the target is not itself
+        {
+            target = newTarget;
+            //Debug.Log("Target set to " + target.name);
+            StartCoroutine(UpdatePath());
+        }
     }
 
     IEnumerator UpdatePath()
@@ -24,7 +32,7 @@ public class EnemyMovement : MonoBehaviour
         while (target != null)
         {
             agent.SetDestination(target.position);
-            Debug.Log("Moving towards target: " + target.name);
+            //Debug.Log("Moving towards target: " + target.name + " at position " + target.position);
             yield return new WaitForSeconds(0.5f); // Adjust update frequency as needed
         }
     }

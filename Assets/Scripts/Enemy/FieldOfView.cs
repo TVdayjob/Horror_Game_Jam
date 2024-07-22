@@ -4,17 +4,28 @@ using UnityEngine;
 
 public class FieldOfView : MonoBehaviour
 {
-    [SerializeField] private float viewRadius = 10f;
-    [SerializeField][Range(0, 360)] private float viewAngle = 90f;
-    [SerializeField] private LayerMask targetMask;
-    [SerializeField] private LayerMask obstacleMask;
+    public float viewRadius;
+    [Range(0, 360)]
+    public float viewAngle;
 
-    private Transform player;
+    public LayerMask targetMask;
+    public LayerMask obstacleMask;
+
+    public List<Transform> visibleTargets = new List<Transform>();
+
+    public float meshResolution;
+    public int edgeResolveIterations;
+    public float edgeDstThreshold;
+
+    public MeshFilter viewMeshFilter;
+    Mesh viewMesh;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        StartCoroutine("FindTargetsWithDelay", 0.2f);
+        viewMesh = new Mesh();
+        viewMesh.name = "View Mesh";
+        viewMeshFilter.mesh = viewMesh;
+        StartCoroutine(FindTargetsWithDelay(0.2f));
     }
 
     IEnumerator FindTargetsWithDelay(float delay)
@@ -28,62 +39,30 @@ public class FieldOfView : MonoBehaviour
 
     void FindVisibleTargets()
     {
+        visibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
-        for (int i = 0; i < targetsInViewRadius.Length; i++)
+        foreach (Collider target in targetsInViewRadius)
         {
-            Transform target = targetsInViewRadius[i].transform;
-            Vector3 dirToTarget = (target.position - transform.position).normalized;
-            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
+            Transform targetTransform = target.transform;
+            if (targetTransform != this.transform) // Ensure it's not the enemy itself
             {
-                float dstToTarget = Vector3.Distance(transform.position, target.position);
-
-                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+                Vector3 dirToTarget = (targetTransform.position - transform.position).normalized;
+                if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
                 {
-                    Debug.DrawLine(transform.position, target.position, Color.red);
-                    Debug.Log("Player detected within view angle.");
+                    float dstToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
-                    // Detected player, can add behavior here like alerting or attacking
-                    EnemyMovement enemyMovement = GetComponent<EnemyMovement>();
-                    if (enemyMovement != null)
+                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                     {
-                        enemyMovement.SetTarget(target);
-                        Debug.Log("Setting target for enemy movement: " + target.name);
+                        visibleTargets.Add(targetTransform);
+                        // Assume there is only one target (the player), you can change this if needed
+                        GetComponent<EnemyMovement>().SetTarget(targetTransform);
+                        break;
                     }
                 }
-                else
-                {
-                    Debug.Log("Obstacle detected between enemy and player.");
-                }
-            }
-            else
-            {
-                Debug.Log("Player not within view angle.");
             }
         }
     }
 
-    public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
-    {
-        if (!angleIsGlobal)
-        {
-            angleInDegrees += transform.eulerAngles.y;
-        }
-        return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        // Draw the view radius
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, viewRadius);
-
-        // Draw the view angle
-        Vector3 fovLine1 = Quaternion.AngleAxis(viewAngle / 2, transform.up) * transform.forward * viewRadius;
-        Vector3 fovLine2 = Quaternion.AngleAxis(-viewAngle / 2, transform.up) * transform.forward * viewRadius;
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, fovLine1);
-        Gizmos.DrawRay(transform.position, fovLine2);
-    }
+    // Add remaining methods for drawing the field of view, etc.
 }

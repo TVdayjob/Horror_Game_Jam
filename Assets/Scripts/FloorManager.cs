@@ -19,6 +19,7 @@ public class FloorManager : MonoBehaviour
         // Initialize two floors: one at the player's level and one above
         floors[0] = InstantiateFloor(0);
         floors[1] = InstantiateFloor(1);
+        SpawnEnemiesOnFloor(floors[1]);
         currentFloorIndex = 0;
         currentLevel = 0;
     }
@@ -90,7 +91,7 @@ public class FloorManager : MonoBehaviour
         Vector3 position = new Vector3(0, (currentLevel + levelOffset) * floorHeight, 0);
         GameObject newFloor = Instantiate(floorPrefab, position, Quaternion.identity);
         SetLevelText(newFloor, currentLevel + levelOffset);
-        SpawnEnemiesOnFloor(newFloor); // Spawning enemies
+        //SpawnEnemiesOnFloor(newFloor); // Spawning enemies
         BakeNavMesh(newFloor); // Baking NavMesh
         return newFloor;
     }
