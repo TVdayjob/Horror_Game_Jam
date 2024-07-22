@@ -12,14 +12,14 @@ public class FloorManager : MonoBehaviour
     private int currentFloorIndex;
     private int currentLevel;
     public GameObject enemyPrefab;
-    public int enemy_spawn_rate = 2;
+    public int enemy_spawn_rate ;
+    public Transform stairwell; // Assign the stairwell transform in the Inspector
 
     void Start()
     {
         // Initialize two floors: one at the player's level and one above
         floors[0] = InstantiateFloor(0);
         floors[1] = InstantiateFloor(1);
-        SpawnEnemiesOnFloor(floors[1]);
         currentFloorIndex = 0;
         currentLevel = 0;
     }
@@ -30,16 +30,15 @@ public class FloorManager : MonoBehaviour
         float playerX = player.position.x;
 
         // Check if the player moved up a floor
-        if (playerY > floors[currentFloorIndex].transform.position.y + floorHeight/2 && playerX > 1.3)
+        if (playerY > floors[currentFloorIndex].transform.position.y + floorHeight / 2 && playerX > 1.3f)
         {
             MoveFloorsUp();
         }
         // Check if the player moved down a floor
-        else if (floors[0] != null && currentFloorIndex > 0 && playerY < floors[currentFloorIndex-1].transform.position.y + floorHeight && playerX <= 1.3)
+        else if (floors[0] != null && currentFloorIndex > 0 && playerY < floors[currentFloorIndex - 1].transform.position.y + floorHeight && playerX <= 1.3f)
         {
             MoveFloorsDown();
         }
-        // Debug.Log("below floor height:" + floors[currentFloorIndex - 1].transform.position.y);
     }
 
     void MoveFloorsUp()
@@ -61,6 +60,7 @@ public class FloorManager : MonoBehaviour
             // Create a new floor above the current top floor
             floors[2] = InstantiateFloor(2);
         }
+        SpawnEnemiesOnFloor(floors[2]);
         currentLevel += 1;
     }
 
@@ -83,6 +83,7 @@ public class FloorManager : MonoBehaviour
         {
             floors[0] = null; // No floor below
         }
+        SpawnEnemiesOnFloor(floors[0]);
         currentLevel -= 1;
     }
 
@@ -90,8 +91,8 @@ public class FloorManager : MonoBehaviour
     {
         Vector3 position = new Vector3(0, (currentLevel + levelOffset) * floorHeight, 0);
         GameObject newFloor = Instantiate(floorPrefab, position, Quaternion.identity);
+        newFloor.transform.parent = this.transform; // Set the parent to the GameObject with the FloorManager script (stairwell)
         SetLevelText(newFloor, currentLevel + levelOffset);
-        //SpawnEnemiesOnFloor(newFloor); // Spawning enemies
         BakeNavMesh(newFloor); // Baking NavMesh
         return newFloor;
     }
@@ -116,10 +117,9 @@ public class FloorManager : MonoBehaviour
                 Random.Range(floorBounds.min.z, floorBounds.max.z)
             );
             GameObject enemy = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
-            enemy.transform.parent = floor.transform; // Parent the enemy to the floor
+            enemy.transform.parent = transform; // Parent the enemy to the stairwell instead of the floor
         }
     }
-
 
     void BakeNavMesh(GameObject floor)
     {
@@ -137,5 +137,4 @@ public class FloorManager : MonoBehaviour
             }
         }
     }
-
 }
