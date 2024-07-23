@@ -38,6 +38,7 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        Debug.Log(gameObject.name + " took damage: " + damage + ", current health: " + currentHealth);
         UpdateHealthBar();
 
         if (currentHealth <= 0)
@@ -54,6 +55,7 @@ public class EnemyHealth : MonoBehaviour
             Vector3 newScale = initialHealthBarScale;
             newScale.x *= healthPercentage;
             healthBarTransform.localScale = newScale;
+            Debug.Log("Health bar updated. Current health: " + currentHealth);
         }
     }
 

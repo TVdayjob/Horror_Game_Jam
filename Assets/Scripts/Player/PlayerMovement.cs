@@ -11,17 +11,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float lookLimit = 45.0f;
     [SerializeField] private Camera playerCamera;
 
-    [Header("Player Arms")]
-    [SerializeField] private Transform rightArm;
-    [SerializeField] private Transform leftArm;
-    [SerializeField] private Transform baseballBat;
-
     [Header("Arm Offset Settings")]
     [SerializeField] private Vector3 rightArmOffset;
     [SerializeField] private Vector3 leftArmOffset;
 
     [Header("Animator")]
     [SerializeField] private Animator playerAnim;
+
+    [Header("Weapon")]
+    [SerializeField] private GameObject baseballBat;
+    [SerializeField] private float batDamage = 20f; // Damage value
 
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
@@ -45,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
 
+    private bool isHoldingBat = false;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -57,8 +58,9 @@ public class PlayerMovement : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Make sure the baseball bat is a child of the right arm
-        baseballBat.SetParent(rightArm);
+        // Check if the player is holding the baseball bat at start
+        isHoldingBat = baseballBat != null && baseballBat.activeInHierarchy;
+        UpdateIdleAnimation();
     }
 
     void Update()
@@ -69,13 +71,9 @@ public class PlayerMovement : MonoBehaviour
             ApplyGravity();
             MoveCharacter();
             HandleCameraRotation();
-            HandleAttack();
+            CheckForBaseballBat();
+            HandleAttackInput();
         }
-    }
-
-    void LateUpdate()
-    {
-        AdjustArmPositions();
     }
 
     private void HandleMovement()
@@ -134,47 +132,54 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HandleAttack()
+    private void CheckForBaseballBat()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking && !isHeavyAttacking)
+        bool currentlyHoldingBat = baseballBat != null && baseballBat.activeInHierarchy;
+        if (currentlyHoldingBat != isHoldingBat)
         {
-            // Determine attack type based on input (for example, hold Shift for heavy attack)
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                StartCoroutine(HeavyAttack());
-            }
-            else
-            {
-                StartCoroutine(NormalAttack());
-            }
+            isHoldingBat = currentlyHoldingBat;
+            UpdateIdleAnimation();
         }
     }
 
-    private IEnumerator NormalAttack()
+    private void HandleAttackInput()
     {
-        isAttacking = true;
-        playerAnim.SetTrigger("normalAttack");
+        if (Input.GetMouseButtonDown(0) && !isAttacking) // Left mouse button
+        {
+            isAttacking = true;
+            playerAnim.SetBool("isAttacking", true);
+        }
+    }
 
-        // Example attack animation coroutine
-        yield return new WaitForSeconds(0.5f); // Adjust timing based on your animation
+    private void UpdateIdleAnimation()
+    {
+        if (isHoldingBat)
+        {
+            playerAnim.SetBool("holdingBat", true);
+        }
+        else
+        {
+            playerAnim.SetBool("holdingBat", false);
+        }
+    }
 
+    // This function should be called by an Animation Event at the end of the attack animation
+    public void ResetAttackState()
+    {
         isAttacking = false;
+        playerAnim.SetBool("isAttacking", false);
     }
 
-    private IEnumerator HeavyAttack()
+    // Handle bat collision with enemy
+    private void OnTriggerEnter(Collider other)
     {
-        isHeavyAttacking = true;
-        playerAnim.SetTrigger("heavyAttack");
-
-        // Example heavy attack animation coroutine
-        yield return new WaitForSeconds(1.0f); // Adjust timing based on your animation
-
-        isHeavyAttacking = false;
-    }
-
-    private void AdjustArmPositions()
-    {
-        rightArm.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(rightArmOffset);
-        leftArm.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(leftArmOffset);
+        if (isAttacking && other.CompareTag("Enemy"))
+        {
+            EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(batDamage);
+            }
+        }
     }
 }
