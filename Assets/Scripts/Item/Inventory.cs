@@ -34,4 +34,16 @@ public class Inventory : MonoBehaviour
         }
         return null;
     }
+
+    public bool HasItem(string itemName)
+    {
+        foreach (Item item in items)
+        {
+            if (item.itemName == itemName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
