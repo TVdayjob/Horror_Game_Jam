@@ -13,6 +13,7 @@ public class GameMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ResumeGame();
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -77,6 +78,7 @@ public class GameMenu : MonoBehaviour
     public void RestartFromCheckpoint()
     {
         playerHealth.Die();
+        ResumeGame();
     }
 
     public void SceneChange(string newScene)
