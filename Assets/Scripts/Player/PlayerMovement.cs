@@ -42,9 +42,6 @@ public class PlayerMovement : MonoBehaviour
     public GameObject gameMenuUI;
     private GameMenu gameMenu;
 
-    [HideInInspector]
-    public bool isAttacking = false;
-
     private float gravity = 20.0f;
     [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
@@ -75,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        AdjustArmPositions();
+        
     }
 
     private void HandleMovement()

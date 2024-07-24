@@ -8,7 +8,6 @@ public class AnimControllerSwitcher : MonoBehaviour
     public RuntimeAnimatorController Idle;
     public RuntimeAnimatorController Moving;
     public RuntimeAnimatorController Running;
-    public RuntimeAnimatorController Jumping;
     public RuntimeAnimatorController Strafing;
     public RuntimeAnimatorController NormalAttack;
     public RuntimeAnimatorController HeavyAttack;
@@ -52,10 +51,6 @@ public class AnimControllerSwitcher : MonoBehaviour
         else if (playerMovement.isStrafing)
         {
             SwitchController(Strafing);
-        }
-        else if (playerMovement.isJumping)
-        {
-            SwitchController(Jumping);
         }
         else
         {

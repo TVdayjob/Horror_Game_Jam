@@ -25,7 +25,7 @@ public class GameMenu : MonoBehaviour
 
         if (pauseMenuUI != null)
         {
-            pauseMenuUI.SetActive(false); // Ensure the pause menu is hidden at the start
+            pauseMenuUI.SetActive(false); 
         }
 
         if (playerHealth == null)
@@ -56,7 +56,8 @@ public class GameMenu : MonoBehaviour
         {
             pauseMenuUI.SetActive(false);
         }
-
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Time.timeScale = 1f; 
         isPaused = false;
     }
@@ -67,7 +68,8 @@ public class GameMenu : MonoBehaviour
         {
             pauseMenuUI.SetActive(true);
         }
-
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         Time.timeScale = 0f; 
         isPaused = true;
     }

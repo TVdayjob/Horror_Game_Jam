@@ -12530,7 +12530,7 @@ PrefabInstance:
       objectReference: {fileID: 189080485}
     - target: {fileID: 552647817926945193, guid: 81a7748f42ca74f5d895fdb9a696d5a6, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 617139920077313702, guid: 81a7748f42ca74f5d895fdb9a696d5a6, type: 3}
       propertyPath: dialogueSystem
