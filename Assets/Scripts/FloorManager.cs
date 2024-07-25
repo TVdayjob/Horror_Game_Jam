@@ -12,7 +12,7 @@ public class FloorManager : MonoBehaviour
     private int currentFloorIndex;
     private int currentLevel;
     public GameObject enemyPrefab;
-    public int enemy_spawn_rate ;
+    public int enemy_spawn_rate;
     public Transform stairwell; // Assign the stairwell transform in the Inspector
 
     void Start()
@@ -62,6 +62,8 @@ public class FloorManager : MonoBehaviour
         }
         SpawnEnemiesOnFloor(floors[2]);
         currentLevel += 1;
+        //Debug.Log("moving up");
+        //Debug.Log(currentLevel);
     }
 
     void MoveFloorsDown()
@@ -78,13 +80,15 @@ public class FloorManager : MonoBehaviour
         if (newPosition.y >= 0)
         {
             floors[0] = InstantiateFloor(-2);
+            SpawnEnemiesOnFloor(floors[0]);
         }
         else
         {
             floors[0] = null; // No floor below
         }
-        SpawnEnemiesOnFloor(floors[0]);
         currentLevel -= 1;
+        //Debug.Log("moving down");
+        //Debug.Log(currentLevel);
     }
 
     GameObject InstantiateFloor(int levelOffset)
