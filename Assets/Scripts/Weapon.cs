@@ -4,6 +4,8 @@ public class Weapon : MonoBehaviour
 {
     [Header("Weapon Settings")]
     [SerializeField] private float damage = 25f;
+    [SerializeField] public float pickupRange = 2f;
+    [SerializeField] public bool isPickedUp = false;
 
     private PlayerMovement playerMovement;
 
@@ -15,7 +17,7 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (playerMovement != null && playerMovement.isAttacking)
+        if (playerMovement != null && playerMovement.isAttacking && isPickedUp)
         {
             EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
@@ -24,5 +26,16 @@ public class Weapon : MonoBehaviour
                 Debug.Log("Hit enemy with weapon!");
             }
         }
+    }
+
+    public void PickUp()
+    {
+        isPickedUp = true;
+        gameObject.SetActive(false); // Deactivate the weapon in the scene
+    }
+
+    public float GetPickupRange()
+    {
+        return pickupRange;
     }
 }
