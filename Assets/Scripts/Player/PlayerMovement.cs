@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -8,19 +9,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float walkingSpeed = 7.5f;
     [SerializeField] private float runningSpeed = 11.5f;
     [SerializeField] private float lookSpeed = 2.0f;
-    [SerializeField] private float lookLimit = 45.0f;
+    [SerializeField] private float lookLimit = 90.0f;
     [SerializeField] private Camera playerCamera;
-
-    [Header("Arm Offset Settings")]
-    [SerializeField] private Vector3 rightArmOffset;
-    [SerializeField] private Vector3 leftArmOffset;
 
     [Header("Animator")]
     [SerializeField] private Animator playerAnim;
 
     [Header("Weapon")]
-    [SerializeField] private GameObject baseballBat;
-    [SerializeField] private float batDamage = 20f; // Damage value
+    [SerializeField] private Transform handTransform; // Player's hand transform
 
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
@@ -40,16 +36,16 @@ public class PlayerMovement : MonoBehaviour
     public GameObject gameMenuUI;
     private GameMenu gameMenu;
 
-    private float gravity = 20.0f;
     [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
 
-    private bool isHoldingBat = false;
+    private Inventory playerInventory;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         gameMenu = gameMenuUI.GetComponent<GameMenu>();
+        playerInventory = GetComponent<Inventory>();
         if (playerAnim == null)
         {
             playerAnim = GetComponent<Animator>();
@@ -57,10 +53,6 @@ public class PlayerMovement : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        // Check if the player is holding the baseball bat at start
-        isHoldingBat = baseballBat != null && baseballBat.activeInHierarchy;
-        UpdateIdleAnimation();
     }
 
     void Update()
@@ -68,11 +60,9 @@ public class PlayerMovement : MonoBehaviour
         if (!gameMenu.isPaused)
         {
             HandleMovement();
-            ApplyGravity();
             MoveCharacter();
             HandleCameraRotation();
-            CheckForBaseballBat();
-            HandleAttackInput();
+            HandlePickup();
         }
     }
 
@@ -102,20 +92,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void ApplyGravity()
-    {
-        if (characterController.isGrounded)
-        {
-            verticalVelocity = 0; // Reset vertical velocity when grounded
-        }
-        else
-        {
-            verticalVelocity -= gravity * Time.deltaTime; // Apply gravity
-        }
-
-        moveDirection.y = verticalVelocity;
-    }
-
     private void MoveCharacter()
     {
         characterController.Move(moveDirection * Time.deltaTime);
@@ -132,54 +108,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void CheckForBaseballBat()
+    private void HandlePickup()
     {
-        bool currentlyHoldingBat = baseballBat != null && baseballBat.activeInHierarchy;
-        if (currentlyHoldingBat != isHoldingBat)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            isHoldingBat = currentlyHoldingBat;
-            UpdateIdleAnimation();
-        }
-    }
-
-    private void HandleAttackInput()
-    {
-        if (Input.GetMouseButtonDown(0) && !isAttacking) // Left mouse button
-        {
-            isAttacking = true;
-            playerAnim.SetBool("isAttacking", true);
-        }
-    }
-
-    private void UpdateIdleAnimation()
-    {
-        if (isHoldingBat)
-        {
-            playerAnim.SetBool("holdingBat", true);
-        }
-        else
-        {
-            playerAnim.SetBool("holdingBat", false);
-        }
-    }
-
-    // This function should be called by an Animation Event at the end of the attack animation
-    public void ResetAttackState()
-    {
-        isAttacking = false;
-        playerAnim.SetBool("isAttacking", false);
-    }
-
-    // Handle bat collision with enemy
-    private void OnTriggerEnter(Collider other)
-    {
-        if (isAttacking && other.CompareTag("Enemy"))
-        {
-            EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
-            if (enemyHealth != null)
+            Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 2f)) // Adjust the distance as needed
             {
-                enemyHealth.TakeDamage(batDamage);
+                Weapon weapon = hit.collider.GetComponent<Weapon>();
+                if (weapon != null && !weapon.isPickedUp)
+                {
+                    playerInventory.AddWeapon(weapon);
+                    weapon.PickUp();
+                    EquipWeapon(weapon);
+                    Debug.Log("Picked up weapon: " + weapon.name);
+                }
             }
         }
+    }
+
+    private void EquipWeapon(Weapon weapon)
+    {
+        // Implement the logic to equip the weapon
+        // For simplicity, let's just activate the weapon as a child of the player's hand
+        weapon.transform.SetParent(handTransform);
+        weapon.transform.localPosition = new Vector3(-0.027f, 0.219f, 0.008f);
+        weapon.transform.localRotation = Quaternion.Euler(-10.222f, 349.32f, 525.088f);
+        weapon.gameObject.SetActive(true);
     }
 }

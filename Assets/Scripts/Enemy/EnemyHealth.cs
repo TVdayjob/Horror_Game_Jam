@@ -4,7 +4,7 @@ public class EnemyHealth : MonoBehaviour
 {
     [Header("Health Settings")]
     [SerializeField] private float maxHealth = 100f;
-    private float currentHealth;
+    public float currentHealth;
 
     [Header("Health Bar Settings")]
     [SerializeField] private GameObject healthBarPrefab;
