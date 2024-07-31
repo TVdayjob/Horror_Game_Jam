@@ -22,7 +22,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartNewGame()
     {
-        StartCoroutine(loadScene("Game"));
+        StartCoroutine(loadScene("Prologue"));
     }
 
     IEnumerator loadScene(string newScene)

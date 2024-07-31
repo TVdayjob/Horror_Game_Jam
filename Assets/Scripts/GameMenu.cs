@@ -90,6 +90,7 @@ public class GameMenu : MonoBehaviour
 
     public void SceneChange(string newScene)
     {
+        ResumeGame();
         StartCoroutine(loadScene(newScene));
     }
 
