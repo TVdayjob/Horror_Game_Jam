@@ -57,7 +57,7 @@ public class GameMenu : MonoBehaviour
             pauseMenuUI.SetActive(false);
         }
 
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; 
         isPaused = false;
     }
 
@@ -68,7 +68,7 @@ public class GameMenu : MonoBehaviour
             pauseMenuUI.SetActive(true);
         }
 
-        Time.timeScale = 0f;
+        Time.timeScale = 0f; 
         isPaused = true;
     }
 
