@@ -9,40 +9,43 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float walkingSpeed = 7.5f;
     [SerializeField] private float runningSpeed = 11.5f;
     [SerializeField] private float lookSpeed = 2.0f;
-    [SerializeField] private float lookLimit = 45.0f;
+    [SerializeField] private float lookLimit = 90.0f;
     [SerializeField] private Camera playerCamera;
-
-    [Header("Player Arms")]
-    [SerializeField] private Transform rightArm;
-    [SerializeField] private Transform leftArm;
-    [SerializeField] private Transform baseballBat;
-
-    [Header("Arm Offset Settings")]
-    [SerializeField] private Vector3 rightArmOffset;
-    [SerializeField] private Vector3 leftArmOffset;
 
     [Header("Animator")]
     [SerializeField] private Animator playerAnim;
+
+    [Header("Weapon")]
+    [SerializeField] private Transform handTransform; // Player's hand transform
 
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
     [HideInInspector] public bool isRunning = false;
+    [HideInInspector] public bool playRunAnim = false;
     [HideInInspector] public bool isMoving = false;
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isStrafing = false;
+    [HideInInspector] public bool isAttacking = false;
+    [HideInInspector] public bool isHeavyAttacking = false;
 
-    [HideInInspector]
-    public bool canMove = true;
+    [HideInInspector] public bool canMove = true;
 
-    private float gravity = 20.0f;
+    [HideInInspector] public Transform respawnPoint;
+
+    public GameObject gameMenuUI;
+    private GameMenu gameMenu;
+
     [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
-    [HideInInspector] public bool isAttacking = false;
+
+    private Inventory playerInventory;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        gameMenu = gameMenuUI.GetComponent<GameMenu>();
+        playerInventory = GetComponent<Inventory>();
         if (playerAnim == null)
         {
             playerAnim = GetComponent<Animator>();
@@ -50,22 +53,17 @@ public class PlayerMovement : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        // Make sure the baseball bat is a child of the right arm
-        baseballBat.SetParent(rightArm);
     }
+
     void Update()
     {
-        HandleMovement();
-        ApplyGravity();
-        MoveCharacter();
-        HandleCameraRotation();
-        HandleAttack();
-    }
-
-    void LateUpdate()
-    {
-        AdjustArmPositions();
+        if (!gameMenu.isPaused)
+        {
+            HandleMovement();
+            MoveCharacter();
+            HandleCameraRotation();
+            HandlePickup();
+        }
     }
 
     private void HandleMovement()
@@ -81,7 +79,8 @@ public class PlayerMovement : MonoBehaviour
 
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        isMoving = moveDirection.magnitude > 0 && !isRunning && !isStrafing && !isRunning;
+        isMoving = moveDirection.magnitude > 0 && !isStrafing && !isRunning;
+        playRunAnim = isRunning && moveDirection.magnitude > 0;
 
         isJumping = characterController.isGrounded && Input.GetKey(KeyCode.Space);
 
@@ -91,20 +90,6 @@ public class PlayerMovement : MonoBehaviour
             playerAnim.SetTrigger("jump");
             characterController.Move(moveDirection * Time.deltaTime);
         }
-    }
-
-    private void ApplyGravity()
-    {
-        if (characterController.isGrounded)
-        {
-            verticalVelocity = 0; // Reset vertical velocity when grounded
-        }
-        else
-        {
-            verticalVelocity -= gravity * Time.deltaTime; // Apply gravity
-        }
-
-        moveDirection.y = verticalVelocity;
     }
 
     private void MoveCharacter()
@@ -123,74 +108,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HandleAttack()
+    private void HandlePickup()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Left mouse button clicked, initiating attack.");
-            StartCoroutine(Attack());
+            Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 2f)) // Adjust the distance as needed
+            {
+                Weapon weapon = hit.collider.GetComponent<Weapon>();
+                if (weapon != null && !weapon.isPickedUp)
+                {
+                    playerInventory.AddWeapon(weapon);
+                    weapon.PickUp();
+                    EquipWeapon(weapon);
+                    Debug.Log("Picked up weapon: " + weapon.name);
+                }
+            }
         }
     }
 
-    private IEnumerator Attack()
+    private void EquipWeapon(Weapon weapon)
     {
-        isAttacking = true;
-        Debug.Log("Attack coroutine started.");
-
-        // Initial positions and rotations
-        Vector3 initialArmPosition = rightArm.localPosition;
-        Quaternion initialArmRotation = rightArm.localRotation;
-
-        Debug.Log("Initial arm position: " + initialArmPosition);
-        Debug.Log("Initial arm rotation: " + initialArmRotation);
-
-        // Prepare the arm for the attack (move back)
-        Vector3 attackPosition = initialArmPosition + new Vector3(-0.5f, 0, 0); // Adjust as needed
-        Quaternion attackRotation = initialArmRotation * Quaternion.Euler(0, 0, -30); // Adjust as needed
-
-        Debug.Log("Attack position: " + attackPosition);
-        Debug.Log("Attack rotation: " + attackRotation);
-
-        // Move back
-        float elapsedTime = 0;
-        float attackDuration = 0.1f; // Adjust as needed
-        while (elapsedTime < attackDuration)
-        {
-            rightArm.localPosition = Vector3.Lerp(initialArmPosition, attackPosition, elapsedTime / attackDuration);
-            rightArm.localRotation = Quaternion.Slerp(initialArmRotation, attackRotation, elapsedTime / attackDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        Debug.Log("Moved back to attack position.");
-
-        // Move forward to hit
-        elapsedTime = 0;
-        attackDuration = 0.2f; // Adjust as needed
-        while (elapsedTime < attackDuration)
-        {
-            Vector3 hitPosition = initialArmPosition + new Vector3(0.5f, 0, 0); // Further than the initial position
-            Quaternion hitRotation = initialArmRotation * Quaternion.Euler(0, 0, 30); // Adjust as needed
-
-            rightArm.localPosition = Vector3.Lerp(attackPosition, hitPosition, elapsedTime / attackDuration);
-            rightArm.localRotation = Quaternion.Slerp(attackRotation, hitRotation, elapsedTime / attackDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        Debug.Log("Moved forward to hit.");
-
-        // Reset to initial position and rotation
-        rightArm.localPosition = initialArmPosition;
-        rightArm.localRotation = initialArmRotation;
-
-        isAttacking = false;
-        Debug.Log("Attack coroutine finished.");
-    }
-
-    private void AdjustArmPositions()
-    {
-        rightArm.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(rightArmOffset);
-        leftArm.position = playerCamera.transform.position + playerCamera.transform.TransformDirection(leftArmOffset);
+        // Implement the logic to equip the weapon
+        // For simplicity, let's just activate the weapon as a child of the player's hand
+        weapon.transform.SetParent(handTransform);
+        weapon.transform.localPosition = new Vector3(-0.027f, 0.219f, 0.008f);
+        weapon.transform.localRotation = Quaternion.Euler(-10.222f, 349.32f, 525.088f);
+        weapon.gameObject.SetActive(true);
     }
 }

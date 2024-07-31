@@ -1,0 +1,206 @@
+[33mcommit f1f612e363b8d0d9c680297f461a3bd1f8e4bab8[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 563b707 066f30a
+Author: unknown <k.rafati@outlook.com>
+Date:   Thu Jul 25 13:22:28 2024 +0330
+
+    merged with Kians_Branch
+
+[33mcommit 066f30aa2bc72166fc5ace1dbb0c57553dc072ca[m[33m ([m[1;31morigin/Kians_Branch[m[33m, [m[1;32mKians_Branch[m[33m)[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Tue Jul 23 14:48:57 2024 +0330
+
+    added an indefinite attack and hold idle animation. added enemy health drain mechanics
+
+[33mcommit f7ae8bb375213ff53b5799196407c74ab8c7807e[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Mon Jul 22 12:42:34 2024 +0330
+
+    fixed the single alien navigation issues (there is still one non-annoying bug) but the multiple-alien system needs work
+
+[33mcommit acca7413e5f0acbfccbdf0ccbbfdb0cd23ecacf4[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Mon Jul 22 12:17:30 2024 +0330
+
+    fixed some issues with alien AI. There's a problem with their navmesh because they're spawned in a baked floor when the player reaches a higher floor they seem to not know how to navigate and walk the new stairs as if their floor's navmesh hasn't been attached to the new floor's navmesh. needs further study.
+
+[33mcommit 6c2222b5cbc50925919569f3dcafed0a4daecac9[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Sun Jul 21 17:11:48 2024 +0330
+
+    added alien spawn logic and dynamic NavMesh baking
+
+[33mcommit fe91859f5c5312a1b5b8d93a30e027cfd754a823[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Sun Jul 21 11:37:11 2024 +0330
+
+    floors now generate with a floor counter
+
+[33mcommit d6d5be15f011def07e0360aee71ffddd3ebb080e[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Sat Jul 20 19:16:06 2024 +0330
+
+    resolved merge conflicts and added procedural stairwell generation to my branch
+
+[33mcommit 5a39b324a91ef5ef59007bc832bbb6db9e67be43[m
+Merge: 8aa90ff da26bda
+Author: LAPTOP-T4DLNTK2\USER <k.rafati@outlook.com>
+Date:   Sat Jul 20 19:14:48 2024 +0330
+
+    Merge branch 'Bleaks_Branch' into Kians_Branch
+
+[33mcommit da26bdaf40e0f96b83bbfd35fec95719c35492e6[m[33m ([m[1;32mBleaks_Branch[m[33m)[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Sat Jul 20 19:11:51 2024 +0330
+
+    procedural gen
+
+[33mcommit 563b707aa956822af651b752cdc3db8fb1ae8384[m
+Merge: 0242692 75ca88f
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Sat Jul 20 14:40:20 2024 +0530
+
+    A lot of changes and conflicts
+
+[33mcommit 02426924433dc5d508aba298b8bd7dcef1b29806[m
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Sat Jul 20 14:22:06 2024 +0530
+
+    A lot of changes
+    
+    I hope I don't break it
+
+[33mcommit 8aa90ff2e71575f1bf76347d4a3e48114026920c[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Fri Jul 19 16:13:15 2024 +0330
+
+    m
+
+[33mcommit 7860e05ab8e27be4f3c16abed7d2588501537c58[m[33m ([m[1;31morigin/Bleaks_Branch[m[33m)[m
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Fri Jul 19 16:48:53 2024 +0530
+
+    Added Alien character
+
+[33mcommit 17d260556ecc1051912ab79b8c68e86ab2037dfe[m
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Fri Jul 19 16:18:01 2024 +0530
+
+    Added Main-menu, pause menu and checkpoint mechanism with procedural generation.
+
+[33mcommit 75ca88f4eeeab278f3bd216056e311be1bd0029c[m
+Merge: 6161c23 fe4160a
+Author: maldron0309 <bagjinhyeong640@gmail.com>
+Date:   Mon Jul 15 07:29:30 2024 +0900
+
+    Merge branch 'main' of https://github.com/DivyanshuKumarSharma/Horror_Game_Jam
+    
+    # Conflicts:
+    #       .DS_Store
+    #       Assets/.DS_Store
+    #       Assets/Scripts/.DS_Store
+    #       Assets/Scripts/Player/PlayerMovement.cs
+
+[33mcommit 5732fffb873e49a1b994aee485d5fa3aea65c0ec[m
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Sat Jul 13 03:56:28 2024 +0530
+
+    Few changes
+    
+    Changed the camera location to wobble and animations.
+
+[33mcommit 60d97bbd53ef4e584e441980d9e720f62d4a8471[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Fri Jul 12 22:22:25 2024 +0330
+
+    painfully created a weapon hold idle and weapon attack animation
+
+[33mcommit fe4160a2e8276e32c949e7febfd6c2f1c8f1a081[m
+Merge: 850d6fd d415024
+Author: unknown <k.rafati@outlook.com>
+Date:   Fri Jul 12 14:56:55 2024 +0330
+
+    merged with Bleak and got a new player prefab and an apartment
+
+[33mcommit d41502418a5703afe4ef6ebed8d0ad4daa341fdb[m[33m ([m[1;34mgrafted[m[33m)[m
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Thu Jul 11 22:12:18 2024 +0530
+
+    My personal progress
+    
+    Added a lot of stuff
+
+[33mcommit ff08e4af47405b3c1c41c570b028ccd286f4a2df[m
+Merge: ae78610 0bbe50c
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Thu Jul 11 21:21:29 2024 +0530
+
+    Merge branch 'main' of https://github.com/DivyanshuKumarSharma/Horror_Game_Jam
+
+[33mcommit 850d6fd2227ad3c8e6ec553f7a5f8ccf26021a3c[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Thu Jul 11 12:33:32 2024 +0330
+
+    added NavMeshAgent AI and a health bar that can be drained by the player's weapon
+
+[33mcommit 0bbe50cc250310abca86163ba19addcc6d52e59e[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Thu Jul 11 11:14:08 2024 +0330
+
+    final tweaks in the intial attack branch
+
+[33mcommit ae786103462be8235bf42e8e290232c23deda19c[m
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Wed Jul 10 20:26:15 2024 +0530
+
+    Update .DS_Store
+
+[33mcommit 6dd97ed21d89890c26ef514b4947a7aaade00db7[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Wed Jul 10 14:56:00 2024 +0330
+
+    added attack movement and fixed the stretchness of the arms a little
+
+[33mcommit cd2da2c7684b06ce6b66d07b036de4d96d5d5e1d[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Wed Jul 10 14:16:05 2024 +0330
+
+    added a bat and arms to the player, player now has a sort of gavity
+
+[33mcommit 2564fa83a7483f5a86dec8eab90899e96b4b654b[m
+Author: unknown <k.rafati@outlook.com>
+Date:   Wed Jul 10 11:31:34 2024 +0330
+
+    created my own branch
+
+[33mcommit 0080822604757ef90ed75ed965f3bc4e377fb7ad[m
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Tue Jul 9 23:34:55 2024 +0530
+
+    Update .DS_Store
+
+[33mcommit 6161c237f148a0efcf6f3b97ed603d1ad3ff34d8[m
+Author: BleakD <divyanshucj23@gmail.com>
+Date:   Sat Jul 6 05:33:54 2024 +0530
+
+    Implemented new Playermovement and implemented mine playermovement and fps cam
+
+[33mcommit f1ea7bb13b82a4f038213f775fab8d7cb58d4ea3[m
+Merge: a42a9c6 2dc345e
+Author: Maldron <bagjinhyeong640@gmail.com>
+Date:   Tue Jul 2 22:59:10 2024 +0900
+
+    Merge pull request #1 from DivyanshuKumarSharma/temp-player
+    
+    feat: player movement
+
+[33mcommit 2dc345e4bbd188c5df21101ac5ff168a72cc1feb[m[33m ([m[1;31morigin/temp-player[m[33m)[m
+Author: maldron0309 <bagjinhyeong640@gmail.com>
+Date:   Tue Jul 2 22:43:33 2024 +0900
+
+    feat: player movement
+
+[33mcommit a42a9c6c9b36f67a67c9935e38c02860f194929c[m
+Author: maldron0309 <bagjinhyeong640@gmail.com>
+Date:   Tue Jul 2 21:51:19 2024 +0900
+
+    first
