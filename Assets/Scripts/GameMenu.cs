@@ -7,6 +7,11 @@ public class GameMenu : MonoBehaviour
 {
     private PlayerHealth playerHealth;
     public GameObject pauseMenuUI;
+    public GameObject healthbarUI;
+
+    public Animator transition;
+
+    private float transitionTime = 1f;
 
     [HideInInspector] public bool isPaused = false;
 
@@ -61,6 +66,7 @@ public class GameMenu : MonoBehaviour
         Cursor.visible = false;
         Time.timeScale = 1f; 
         isPaused = false;
+        healthbarUI.SetActive(true);
     }
 
     public void PauseGame()
@@ -73,6 +79,7 @@ public class GameMenu : MonoBehaviour
         Cursor.visible = true;
         Time.timeScale = 0f; 
         isPaused = true;
+        healthbarUI.SetActive(false);
     }
 
     public void RestartFromCheckpoint()
@@ -83,6 +90,15 @@ public class GameMenu : MonoBehaviour
 
     public void SceneChange(string newScene)
     {
+        StartCoroutine(loadScene(newScene));
+    }
+
+    IEnumerator loadScene(string newScene)
+    {
+        transition.SetTrigger("start");
+
+        yield return new WaitForSeconds(transitionTime);
+
         SceneManager.LoadScene(newScene);
     }
 
