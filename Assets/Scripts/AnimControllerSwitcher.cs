@@ -52,10 +52,6 @@ public class AnimControllerSwitcher : MonoBehaviour
         {
             SwitchController(Strafing);
         }
-        else if (playerMovement.isJumping)
-        {
-            SwitchController(Jumping);
-        }
         else
         {
             SwitchController(Idle);
