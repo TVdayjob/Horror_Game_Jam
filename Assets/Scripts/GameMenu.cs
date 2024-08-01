@@ -7,12 +7,18 @@ public class GameMenu : MonoBehaviour
 {
     private PlayerHealth playerHealth;
     public GameObject pauseMenuUI;
+    public GameObject healthbarUI;
+
+    public Animator transition;
+
+    private float transitionTime = 1f;
 
     [HideInInspector] public bool isPaused = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        ResumeGame();
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -25,7 +31,7 @@ public class GameMenu : MonoBehaviour
 
         if (pauseMenuUI != null)
         {
-            pauseMenuUI.SetActive(false); // Ensure the pause menu is hidden at the start
+            pauseMenuUI.SetActive(false); 
         }
 
         if (playerHealth == null)
@@ -56,9 +62,11 @@ public class GameMenu : MonoBehaviour
         {
             pauseMenuUI.SetActive(false);
         }
-
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         Time.timeScale = 1f; 
         isPaused = false;
+        healthbarUI.SetActive(true);
     }
 
     public void PauseGame()
@@ -67,18 +75,31 @@ public class GameMenu : MonoBehaviour
         {
             pauseMenuUI.SetActive(true);
         }
-
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         Time.timeScale = 0f; 
         isPaused = true;
+        healthbarUI.SetActive(false);
     }
 
     public void RestartFromCheckpoint()
     {
         playerHealth.Die();
+        ResumeGame();
     }
 
     public void SceneChange(string newScene)
     {
+        ResumeGame();
+        StartCoroutine(loadScene(newScene));
+    }
+
+    IEnumerator loadScene(string newScene)
+    {
+        transition.SetTrigger("start");
+
+        yield return new WaitForSeconds(transitionTime);
+
         SceneManager.LoadScene(newScene);
     }
 

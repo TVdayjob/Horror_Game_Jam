@@ -5,10 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public Animator transition;
+
+    private float transitionTime = 1f;
 
     public void SceneChange(string newScene)
     {
-        SceneManager.LoadScene(newScene);
+        StartCoroutine(loadScene(newScene));
     }
 
     public void QuitApp()
@@ -19,7 +22,15 @@ public class MainMenu : MonoBehaviour
 
     public void StartNewGame()
     {
-        //Start New Game
-        Debug.Log("New Game Started");
+        StartCoroutine(loadScene("Prologue"));
+    }
+
+    IEnumerator loadScene(string newScene)
+    {
+        transition.SetTrigger("start");
+
+        yield return new WaitForSeconds(transitionTime);
+
+        SceneManager.LoadScene(newScene);
     }
 }

@@ -30,11 +30,13 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool isHeavyAttacking = false;
 
     [HideInInspector] public bool canMove = true;
+    [HideInInspector] public bool canRun = true;
 
     [HideInInspector] public Transform respawnPoint;
 
     public GameObject gameMenuUI;
     private GameMenu gameMenu;
+    private PlayerHealth playerHealth;
 
     [SerializeField] private float jumpForce = 10;
     private float verticalVelocity = 0;
@@ -71,7 +73,11 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
-        isRunning = Input.GetKey(KeyCode.LeftShift);
+        bool isRunningAttempt = Input.GetKey(KeyCode.LeftShift) && canRun;
+        isRunning = isRunningAttempt && playerHealth.playerStamina > 0;
+
+        playerHealth.SetRunning(isRunning);
+
         float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
 

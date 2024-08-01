@@ -32,7 +32,6 @@ public class Weapon : MonoBehaviour
     {
         isPickedUp = true;
         gameObject.SetActive(false); // Deactivate the weapon in the scene
-        Debug.Log("picked up");
     }
 
     public float GetPickupRange()
