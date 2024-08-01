@@ -24,6 +24,12 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
+    public bool HasItem(string newItem)
+    {
+        //do stuff
+        return true;
+    }
+
     public int GetWeaponCount()
     {
         return weapons.Count;
