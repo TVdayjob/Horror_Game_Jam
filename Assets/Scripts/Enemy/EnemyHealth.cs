@@ -27,7 +27,7 @@ public class EnemyHealth : MonoBehaviour
             healthBarTransform = healthBarInstance.transform;
 
             // Position the health bar above the enemy
-            healthBarTransform.localPosition = new Vector3(0, 2, 0); // Adjust as needed
+            healthBarTransform.localPosition = new Vector3(0, 1.5f, 0); // Adjust as needed
 
             // Store the initial scale of the health bar
             initialHealthBarScale = healthBarTransform.localScale;
@@ -55,7 +55,7 @@ public class EnemyHealth : MonoBehaviour
             Vector3 newScale = initialHealthBarScale;
             newScale.x *= healthPercentage;
             healthBarTransform.localScale = newScale;
-            //Debug.Log("Health bar updated. Current health: " + currentHealth);
+            Debug.Log("Health bar updated. Current health: " + currentHealth);
         }
     }
 

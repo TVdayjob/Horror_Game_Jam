@@ -9,8 +9,6 @@ public class AnimControllerSwitcher : MonoBehaviour
     public RuntimeAnimatorController Moving;
     public RuntimeAnimatorController Running;
     public RuntimeAnimatorController Strafing;
-    public RuntimeAnimatorController NormalAttack;
-    public RuntimeAnimatorController HeavyAttack;
 
     private PlayerMovement playerMovement;
 
@@ -32,15 +30,7 @@ public class AnimControllerSwitcher : MonoBehaviour
 
     void Animate()
     {
-        if (playerMovement.isAttacking)
-        {
-            SwitchController(NormalAttack);
-        }
-        else if (playerMovement.isHeavyAttacking)
-        {
-            SwitchController(HeavyAttack);
-        }
-        else if (playerMovement.isMoving)
+        if (playerMovement.isMoving)
         {
             SwitchController(Moving);
         }

@@ -27,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isStrafing = false;
     [HideInInspector] public bool isAttacking = false;
-    [HideInInspector] public bool isHeavyAttacking = false;
 
     [HideInInspector] public bool canMove = true;
     [HideInInspector] public bool canRun = true;
@@ -104,8 +103,21 @@ public class PlayerMovement : MonoBehaviour
         {
             verticalVelocity += gravity * Time.deltaTime; 
         }
+        if (Input.GetMouseButtonDown(0) && playerInventory.weapons.Count != 0)
+        {
+            // Your code here
+            Debug.Log("Attacked");
+            isAttacking = true;
+            playerAnim.SetTrigger("BB_Attack");
+            StartCoroutine(ResetAttack());
+        }
     }
 
+    private IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(0.5f);
+        isAttacking = false;
+    }
     private void MoveCharacter()
     {
         moveDirection.y = verticalVelocity;

@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private List<Weapon> weapons;
+    public List<Weapon> weapons;
+    public Weapon SelectedWeapon;
 
     private void Start()
     {
@@ -19,7 +20,8 @@ public class Inventory : MonoBehaviour
     {
         if (index >= 0 && index < weapons.Count)
         {
-            return weapons[index];
+            SelectedWeapon = weapons[index];
+            return SelectedWeapon;
         }
         return null;
     }
