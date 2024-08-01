@@ -38,7 +38,7 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        //Debug.Log(gameObject.name + " took damage: " + damage + ", current health: " + currentHealth);
+        Debug.Log(gameObject.name + " took damage: " + damage + ", current health: " + currentHealth);
         UpdateHealthBar();
 
         if (currentHealth <= 0)

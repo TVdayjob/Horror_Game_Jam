@@ -54,7 +54,7 @@ public class AnimControllerSwitcher : MonoBehaviour
         }
         else if (playerMovement.isJumping)
         {
-            SwitchController(Jumping);
+            //SwitchController(Jumping);
         }
         else
         {
