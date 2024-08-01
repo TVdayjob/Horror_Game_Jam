@@ -37,8 +37,9 @@ public class PlayerMovement : MonoBehaviour
     public GameObject gameMenuUI;
     private GameMenu gameMenu;
     private PlayerHealth playerHealth;
+    private float gravity = -9.81f;
 
-    [SerializeField] private float jumpForce = 10;
+    [SerializeField] private float jumpForce = 5f;
     private float verticalVelocity = 0;
 
     private Inventory playerInventory;
@@ -48,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         gameMenu = gameMenuUI.GetComponent<GameMenu>();
         playerInventory = GetComponent<Inventory>();
+        playerHealth = GetComponent<PlayerHealth>(); 
         if (playerAnim == null)
         {
             playerAnim = GetComponent<Animator>();
@@ -88,18 +90,25 @@ public class PlayerMovement : MonoBehaviour
         isMoving = moveDirection.magnitude > 0 && !isStrafing && !isRunning;
         playRunAnim = isRunning && moveDirection.magnitude > 0;
 
-        isJumping = characterController.isGrounded && Input.GetKey(KeyCode.Space);
-
-        if (isJumping)
+        if (characterController.isGrounded)
         {
-            verticalVelocity += jumpForce;
-            playerAnim.SetTrigger("jump");
-            characterController.Move(moveDirection * Time.deltaTime);
+            verticalVelocity = 0; 
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                verticalVelocity = jumpForce;
+                playerAnim.SetTrigger("jump");
+            }
+        }
+        else
+        {
+            verticalVelocity += gravity * Time.deltaTime; 
         }
     }
 
     private void MoveCharacter()
     {
+        moveDirection.y = verticalVelocity;
         characterController.Move(moveDirection * Time.deltaTime);
     }
 

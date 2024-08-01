@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &379418859139151447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6081679196522807359}
+  m_Layer: 0
+  m_Name: NPCstand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6081679196522807359
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379418859139151447}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.1, y: 0, z: 1.32}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1491476664969335343}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420758634349362235
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,6 +918,9 @@ GameObject:
   - component: {fileID: 1806562275124867312}
   - component: {fileID: 7403638887093441730}
   - component: {fileID: 9112229442302786728}
+  - component: {fileID: 216116560434496557}
+  - component: {fileID: 1589480481119370667}
+  - component: {fileID: 174742650940573071}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -909,6 +943,7 @@ Transform:
   m_Children:
   - {fileID: 9017428345435615508}
   - {fileID: 8891349134713181610}
+  - {fileID: 6081679196522807359}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -175.507, z: 0}
 --- !u!95 &5434886706590387999
@@ -957,7 +992,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1, z: 0.12}
 --- !u!114 &2290391847387092817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -975,23 +1010,20 @@ MonoBehaviour:
   lookSpeed: 2
   lookLimit: 45
   playerCamera: {fileID: 6479322427158906058}
-  rightArm: {fileID: 4645922315990245040}
-  leftArm: {fileID: 4923953071527134810}
-  baseballBat: {fileID: 400000, guid: 97517604619949e4181e4fd84e478db8, type: 3}
-  rightArmOffset: {x: 0, y: 0, z: 0}
-  leftArmOffset: {x: 0, y: 0, z: 0}
   playerAnim: {fileID: 5434886706590387999}
+  handTransform: {fileID: 4645922315990245040}
   isRunning: 0
   playRunAnim: 0
   isMoving: 0
   isJumping: 0
   isStrafing: 0
+  isAttacking: 0
+  isHeavyAttacking: 0
   canMove: 1
+  canRun: 1
   respawnPoint: {fileID: 0}
   gameMenuUI: {fileID: 0}
   jumpForce: 8
-  isAttacking: 0
-  isHeavyAttacking: 0
 --- !u!114 &1997370737012055922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1008,7 +1040,6 @@ MonoBehaviour:
   Idle: {fileID: 9100000, guid: a8555c0cff30527479e32562cef9141f, type: 2}
   Moving: {fileID: 9100000, guid: 75d3a58b3d7879f41926561701407a48, type: 2}
   Running: {fileID: 9100000, guid: eb79e3fd0dd669f40a90a984b92a0ccf, type: 2}
-  Jumping: {fileID: 9100000, guid: 54ff599963ec97843ad4d4ddeeb61810, type: 2}
   Strafing: {fileID: 9100000, guid: 4a89b7a8240b5ed428f86209704c5b45, type: 2}
   NormalAttack: {fileID: 0}
   HeavyAttack: {fileID: 0}
@@ -1025,6 +1056,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHP: 100
+  playerStamina: 100
+  maxStamina: 100
+  staminaDrainRate: 10
+  staminaRestoreRate: 5
+  staminaRestoreDelay: 2
+  healthbar: {fileID: 0}
 --- !u!114 &7403638887093441730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1053,6 +1090,59 @@ MonoBehaviour:
   respawnHP: 0
   gotCheckPoint: 0
   respawnPoint: {fileID: 0}
+--- !u!136 &216116560434496557
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581354920001820069}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Height: 2.1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.95, z: 0}
+--- !u!114 &1589480481119370667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581354920001820069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 234a9b589818940959b9f589f2e07e8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionDistance: 3
+--- !u!114 &174742650940573071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581354920001820069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbf93bc057e21484d8594095a0b8274c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactUIContainer: {fileID: 0}
+  playerInteract: {fileID: 1589480481119370667}
+  dialogueSystem: {fileID: 0}
+  npcStand: {fileID: 6081679196522807359}
+  interactText: {fileID: 0}
 --- !u!1 &3630797191385375557
 GameObject:
   m_ObjectHideFlags: 0
