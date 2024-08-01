@@ -557,6 +557,7 @@ MonoBehaviour:
   - Kill another mockingbird
   - Jill valentine in the building
   textDisplayTime: 5
+  sceneToLoad: Lobby
 --- !u!1 &1493289310
 GameObject:
   m_ObjectHideFlags: 0
