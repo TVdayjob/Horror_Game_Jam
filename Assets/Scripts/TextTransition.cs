@@ -13,6 +13,8 @@ public class TextTransition : MonoBehaviour
     private bool isTextDisplayed = false;
     private float timer = 0f;
 
+    public string sceneToLoad;
+
     void Start()
     {
         DisplayNextLine();
@@ -52,7 +54,7 @@ public class TextTransition : MonoBehaviour
 
     IEnumerator LoadGameScene()
     {
-        yield return new WaitForSeconds(1f); 
-        SceneManager.LoadScene("Game"); 
+        yield return new WaitForSeconds(2f); 
+        SceneManager.LoadScene(sceneToLoad); 
     }
 }

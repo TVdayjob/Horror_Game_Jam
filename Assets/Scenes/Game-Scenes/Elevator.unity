@@ -461,12 +461,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   storyText: {fileID: 2143751035}
   storyLines:
-  - Hey World
-  - How are you doing this fine evening
-  - I was wondering if you would like to join me in this presentation.
-  - Kill another mockingbird
-  - Jill valentine in the building
+  - The elevator reaches the basement where the car is parked.
+  - '!!SUDDENLY!!  A crash is heard near the elevator.'
   textDisplayTime: 5
+  sceneToLoad: Basement
 --- !u!1 &1123374265
 GameObject:
   m_ObjectHideFlags: 0
