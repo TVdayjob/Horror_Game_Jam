@@ -4,10 +4,12 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     private List<Weapon> weapons;
+    private List<Item> items;
 
     private void Start()
     {
         weapons = new List<Weapon>();
+        items = new List<Item>();
     }
 
     public void AddWeapon(Weapon weapon)
@@ -24,10 +26,31 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
-    public bool HasItem(string newItem)
+    public void AddItem(Item item)
     {
-        //do stuff
-        return true;
+        items.Add(item);
+    }
+
+    public bool HasItem(string itemName)
+    {
+        foreach (Item item in items)
+        {
+            if (item.itemName == itemName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void RemoveItem(Item item)
+    {
+        items.Remove(item);
+    }
+
+    public int GetItemCount()
+    {
+        return items.Count;
     }
 
     public int GetWeaponCount()

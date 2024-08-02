@@ -2,7 +2,13 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public float interactionDistance = 2f; 
+    public float interactionDistance = 2f;
+    private Inventory inventory;
+
+    void Start()
+    {
+        inventory = GetComponent<Inventory>();
+    }
 
     void Update()
     {
@@ -15,15 +21,26 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     interactable.Interact(transform);
                 }
+                else if (collider.TryGetComponent(out Item item))
+                {
+                    inventory.AddItem(item);
+                    Debug.Log("Picked up: " + item.itemName);
+                }
+                else if (collider.TryGetComponent(out Weapon weapon))
+                {
+                    inventory.AddWeapon(weapon);
+                    Debug.Log("Picked up: " + weapon.weaponName);
+                }
             }
         }
     }
 
-    public IInteractable getNPC()
+    public IInteractable GetInteractable()
     {
         Collider[] colliderArray = Physics.OverlapSphere(transform.position, interactionDistance);
-        foreach (Collider collider in colliderArray) {
-            if(collider.TryGetComponent(out IInteractable interactable))
+        foreach (Collider collider in colliderArray)
+        {
+            if (collider.TryGetComponent(out IInteractable interactable))
             {
                 return interactable;
             }
@@ -34,6 +51,6 @@ public class PlayerInteraction : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(Camera.main.transform.position, interactionDistance);
+        Gizmos.DrawWireSphere(transform.position, interactionDistance);
     }
 }

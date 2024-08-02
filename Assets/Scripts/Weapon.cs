@@ -7,6 +7,8 @@ public class Weapon : MonoBehaviour
     [SerializeField] public float pickupRange = 2f;
     [SerializeField] public bool isPickedUp = false;
 
+    public string weaponName;
+
     private PlayerMovement playerMovement;
 
     private void Start()
@@ -31,11 +33,12 @@ public class Weapon : MonoBehaviour
     public void PickUp()
     {
         isPickedUp = true;
-        gameObject.SetActive(false); // Deactivate the weapon in the scene
+        gameObject.SetActive(false); 
     }
 
     public float GetPickupRange()
     {
         return pickupRange;
     }
+
 }

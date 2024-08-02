@@ -19,11 +19,11 @@ public class PlayerInteractUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerInteract.getNPC() != null)
+        if(playerInteract.GetInteractable() != null)
         {
             npcStand.gameObject.SetActive(false);
             if (!dialogueSystem.alreadyStarted) {
-                show(playerInteract.getNPC());
+                show(playerInteract.GetInteractable());
             }
             else
             {
