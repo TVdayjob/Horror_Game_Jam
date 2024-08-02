@@ -5,6 +5,7 @@ public class Inventory : MonoBehaviour
 {
     private List<Weapon> weapons;
     private List<Item> items;
+    public Weapon SelectedWeapon;
 
     private void Start()
     {
@@ -21,7 +22,8 @@ public class Inventory : MonoBehaviour
     {
         if (index >= 0 && index < weapons.Count)
         {
-            return weapons[index];
+            SelectedWeapon = weapons[index];
+            return SelectedWeapon;
         }
         return null;
     }

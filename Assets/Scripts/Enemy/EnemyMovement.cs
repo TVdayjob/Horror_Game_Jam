@@ -7,13 +7,14 @@ public class EnemyMovement : MonoBehaviour
 {
     private NavMeshAgent agent;
     private Transform target;
+    private float stoppingDistance = 1.5f; // Distance at which the enemy stops
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         if (agent == null)
         {
-            //Debug.LogError("NavMeshAgent component not found on " + gameObject.name);
+            Debug.LogError("NavMeshAgent component not found on " + gameObject.name);
         }
     }
 
@@ -31,8 +32,20 @@ public class EnemyMovement : MonoBehaviour
     {
         while (target != null)
         {
-            agent.SetDestination(target.position);
-            //Debug.Log("Moving towards target: " + target.name + " at position " + target.position);
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+            if (distanceToTarget <= stoppingDistance)
+            {
+                agent.isStopped = true;
+                //Debug.Log("Enemy stopped within 1.4 meters of the target.");
+            }
+            else
+            {
+                agent.isStopped = false;
+                agent.SetDestination(target.position);
+                //Debug.Log("Moving towards target: " + target.name + " at position " + target.position);
+            }
+
             yield return new WaitForSeconds(0.5f); // Adjust update frequency as needed
         }
     }
