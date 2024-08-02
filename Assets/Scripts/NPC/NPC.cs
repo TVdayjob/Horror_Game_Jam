@@ -57,4 +57,9 @@ public class NPC : MonoBehaviour, IInteractable
     {
         isStarted = false;
     }
+
+    public void UpdateDialogues(string[] newDialogues)
+    {
+        dialogues = newDialogues;
+    }
 }

@@ -3312,6 +3312,10 @@ PrefabInstance:
       propertyPath: sceneToLoad
       value: Stairwell-Fight
       objectReference: {fileID: 0}
+    - target: {fileID: 3498990719306612481, guid: 846306d9cf8f94e54b20110beede23ca, type: 3}
+      propertyPath: checkpointMessage
+      value: Lets get the fuck out of here!!
+      objectReference: {fileID: 0}
     - target: {fileID: 6054798946628406915, guid: 846306d9cf8f94e54b20110beede23ca, type: 3}
       propertyPath: m_Name
       value: Checkpoint-to-stairwell

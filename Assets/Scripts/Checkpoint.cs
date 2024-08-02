@@ -18,6 +18,9 @@ public class Checkpoint : MonoBehaviour
     public TextMeshProUGUI messageText;
     public string checkpointMessage;
 
+    public NPC npc;
+    public string[] newDialogues;
+
     private void Start()
     {
         if (messageText != null)
@@ -77,6 +80,11 @@ public class Checkpoint : MonoBehaviour
                     else
                     {
                         Debug.LogWarning("Next object is not assigned.");
+                    }
+
+                    if (npc != null)
+                    {
+                        npc.UpdateDialogues(newDialogues);
                     }
                 }
                 else
