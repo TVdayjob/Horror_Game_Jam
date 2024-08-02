@@ -577,7 +577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41f078e3800b9a24c84e546f6a0ba73a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.94
+      value: 4.024
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 41f078e3800b9a24c84e546f6a0ba73a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1506,11 +1506,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 23e2ddcc1aa3bf047bad39bb10be8eac, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.94
+      value: 4.024
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 23e2ddcc1aa3bf047bad39bb10be8eac, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -144.57619
+      value: -144.823
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 23e2ddcc1aa3bf047bad39bb10be8eac, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2155,6 +2155,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76f72d44ca71b694bad3669ec3e11ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapons: []
+  items: []
+  SelectedWeapon: {fileID: 0}
 --- !u!1001 &1288443525
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2351,6 +2354,8 @@ MonoBehaviour:
   damage: 25
   pickupRange: 2
   isPickedUp: 0
+  isSelected: 0
+  player: {fileID: 1232695283}
   weaponName: Girl Boots
 --- !u!65 &1316286851
 BoxCollider:

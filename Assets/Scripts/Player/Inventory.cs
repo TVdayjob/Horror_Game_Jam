@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private List<Weapon> weapons;
-    private List<Item> items;
+    public List<Weapon> weapons;
+    public List<Item> items;
     public Weapon SelectedWeapon;
 
     private void Start()
