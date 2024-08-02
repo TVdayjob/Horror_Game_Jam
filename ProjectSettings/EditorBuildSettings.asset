@@ -12,6 +12,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Game-Scenes/Prologue.unity
     guid: 319a4d6d48b9c402783effc5cb403461
   - enabled: 1
-    path: Assets/Scenes/Game-Scenes/Game.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/Game-Scenes/Lobby.unity
+    guid: d5a7ea1fd96634d35ba3641ac10ab272
+  - enabled: 1
+    path: Assets/Scenes/Game-Scenes/Elevator.unity
+    guid: 69ed377b410654c2399776c89aa4f383
+  - enabled: 1
+    path: Assets/Scenes/Game-Scenes/Basement.unity
+    guid: 569691987741a481cb818a8064632273
+  - enabled: 1
+    path: Assets/Scenes/Game-Scenes/Stairwell-Fight.unity
+    guid: 7ed347ade6600c441ac47a6586b09f6f
   m_configObjects: {}

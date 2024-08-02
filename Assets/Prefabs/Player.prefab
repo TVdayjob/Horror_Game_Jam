@@ -921,6 +921,8 @@ GameObject:
   - component: {fileID: 216116560434496557}
   - component: {fileID: 1589480481119370667}
   - component: {fileID: 174742650940573071}
+  - component: {fileID: 1248864734940580870}
+  - component: {fileID: 1906249535188685220}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1018,7 +1020,6 @@ MonoBehaviour:
   isJumping: 0
   isStrafing: 0
   isAttacking: 0
-  isHeavyAttacking: 0
   canMove: 1
   canRun: 1
   respawnPoint: {fileID: 0}
@@ -1041,8 +1042,6 @@ MonoBehaviour:
   Moving: {fileID: 9100000, guid: 75d3a58b3d7879f41926561701407a48, type: 2}
   Running: {fileID: 9100000, guid: eb79e3fd0dd669f40a90a984b92a0ccf, type: 2}
   Strafing: {fileID: 9100000, guid: 4a89b7a8240b5ed428f86209704c5b45, type: 2}
-  NormalAttack: {fileID: 0}
-  HeavyAttack: {fileID: 0}
 --- !u!114 &1806562275124867312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1143,6 +1142,35 @@ MonoBehaviour:
   dialogueSystem: {fileID: 0}
   npcStand: {fileID: 6081679196522807359}
   interactText: {fileID: 0}
+--- !u!114 &1248864734940580870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581354920001820069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f72d44ca71b694bad3669ec3e11ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapons: []
+  items: []
+  SelectedWeapon: {fileID: 0}
+--- !u!114 &1906249535188685220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581354920001820069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9029532d18f67482197725119acae9a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  taskText: {fileID: 0}
+  currentTask: 
 --- !u!1 &3630797191385375557
 GameObject:
   m_ObjectHideFlags: 0

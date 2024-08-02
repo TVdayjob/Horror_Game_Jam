@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour, IInteractable
 {
     [HideInInspector]public float health = 100f;
+    public string interactText;
     public string[] dialogues;
     public DialogueSystem dialogueSystem;
     [HideInInspector]public bool isStarted = false;
@@ -49,7 +50,7 @@ public class NPC : MonoBehaviour, IInteractable
 
     public string getInteractText()
     {
-        return "Talk with Jill";
+        return interactText;
     }
 
     public void EndInteraction()

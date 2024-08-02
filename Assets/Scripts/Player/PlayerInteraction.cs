@@ -20,11 +20,11 @@ public class PlayerInteraction : MonoBehaviour
                 if (collider.TryGetComponent(out IInteractable interactable))
                 {
                     interactable.Interact(transform);
-                }
-                else if (collider.TryGetComponent(out Item item))
-                {
-                    inventory.AddItem(item);
-                    Debug.Log("Picked up: " + item.itemName);
+                    if (collider.TryGetComponent(out Item item))
+                    {
+                        inventory.AddItem(item);
+                        Debug.Log("Picked up: " + item.itemName);
+                    }
                 }
                 else if (collider.TryGetComponent(out Weapon weapon))
                 {
