@@ -155,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
                     EquipWeapon(weapon);
                     Debug.Log("Picked up weapon: " + weapon.name);
                 }
-                else if (powerUp != null)
+                else if (powerUp != null && playerInventory.SelectedWeapon != null)
                 {
                     ApplyPowerUp(powerUp);
                     powerUp.PickUp(); // Hide or deactivate the power-up

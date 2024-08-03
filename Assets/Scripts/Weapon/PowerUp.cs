@@ -7,12 +7,12 @@ public class PowerUp : MonoBehaviour, IInteractable
 
     public void Interact(Transform interacterTransform)
     {
-        PlayerMovement playerMovement = interacterTransform.GetComponent<PlayerMovement>();
-        if (playerMovement != null)
-        {
-            playerMovement.ApplyPowerUp(this);
-            Destroy(gameObject); 
-        }
+        //PlayerMovement playerMovement = interacterTransform.GetComponent<PlayerMovement>();
+        //if (playerMovement != null)
+        //{
+        //    playerMovement.ApplyPowerUp(this);
+        //    Destroy(gameObject); 
+        //}
     }
 
     public string getInteractText()

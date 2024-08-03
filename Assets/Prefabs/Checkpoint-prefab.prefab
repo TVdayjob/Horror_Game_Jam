@@ -26,9 +26,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6054798946628406915}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 37.98, y: 0.44, z: 3.9199982}
-  m_LocalScale: {x: 15.027357, y: 1, z: 1}
+  m_LocalScale: {x: 11.380383, y: 1.4595072, z: 0.66506}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,6 +47,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentObj: {fileID: 0}
   nextObj: {fileID: 0}
+  sceneToLoad: 
+  nextTask: 
+  taskManager: {fileID: 0}
+  transition: {fileID: 0}
+  transitionTime: 2
+  requiredItem: 
+  messageText: {fileID: 0}
+  checkpointMessage: 
+  npc: {fileID: 0}
+  newDialogues: []
 --- !u!65 &7723653138198179391
 BoxCollider:
   m_ObjectHideFlags: 0

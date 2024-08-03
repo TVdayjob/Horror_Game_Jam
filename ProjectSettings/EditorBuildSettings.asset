@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game-Scenes/Stairwell-Fight.unity
     guid: 7ed347ade6600c441ac47a6586b09f6f
+  - enabled: 1
+    path: Assets/Scenes/Game-Scenes/Floor-15.unity
+    guid: 6a5e563cb1bbb465184987ee22dd2eb2
+  - enabled: 1
+    path: Assets/Scenes/Game-Scenes/Floor-30.unity
+    guid: 7032ebb9b98c14d989f924a8ebd4d40a
   m_configObjects: {}

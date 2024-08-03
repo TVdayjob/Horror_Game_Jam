@@ -12,7 +12,7 @@ public class Weapon : MonoBehaviour
 
     public string weaponName;
 
-    private float currentDamage;
+    public float currentDamage;
     private PlayerMovement playerMovement;
 
     private void Start()
