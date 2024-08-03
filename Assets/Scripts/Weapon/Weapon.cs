@@ -3,26 +3,27 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     [Header("Weapon Settings")]
-    [SerializeField] private float damage = 25f;
+    [SerializeField] private float baseDamage = 25f;
     [SerializeField] public float pickupRange = 2f;
     [SerializeField] public bool isPickedUp = false;
     [SerializeField] public bool isSelected = false;
 
-     public GameObject player;
+    public GameObject player;
 
     public string weaponName;
 
+    private float currentDamage;
     private PlayerMovement playerMovement;
 
     private void Start()
     {
-        // Assume the weapon is a child of the player, so we get the PlayerMovement from the parent
         playerMovement = player.GetComponent<PlayerMovement>();
+        currentDamage = baseDamage; // Initialize current damage
     }
 
     private void Update()
     {
-       // Debug.Log(playerMovement.isAttacking);
+        // Debug.Log(playerMovement.isAttacking);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,7 +33,7 @@ public class Weapon : MonoBehaviour
             EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(damage);
+                enemyHealth.TakeDamage(currentDamage);
                 Debug.Log("Hit enemy with weapon!");
             }
         }
@@ -40,9 +41,8 @@ public class Weapon : MonoBehaviour
 
     public void PickUp()
     {
-
         isPickedUp = true;
-        gameObject.SetActive(false); 
+        gameObject.SetActive(false);
     }
 
     public float GetPickupRange()
@@ -50,4 +50,8 @@ public class Weapon : MonoBehaviour
         return pickupRange;
     }
 
+    public void IncreaseDamage(float amount)
+    {
+        currentDamage += amount;
+    }
 }

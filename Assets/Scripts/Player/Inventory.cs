@@ -7,24 +7,33 @@ public class Inventory : MonoBehaviour
     public List<Item> items;
     public Weapon SelectedWeapon;
 
-    private void Start()
+    private void Awake()
     {
-        weapons = new List<Weapon>();
-        items = new List<Item>();
+        if (weapons == null)
+        {
+            weapons = new List<Weapon>();
+        }
+        if (items == null)
+        {
+            items = new List<Item>();
+        }
     }
 
     public void AddWeapon(Weapon weapon)
     {
         weapons.Add(weapon);
+        Debug.Log("Weapon added: " + weapon.weaponName);
     }
 
     public Weapon GetWeapon(int index)
     {
         if (index >= 0 && index < weapons.Count)
         {
+            Debug.Log("Retrieved weapon: " + weapons[index].weaponName);
             SelectedWeapon = weapons[index];
             return SelectedWeapon;
         }
+        Debug.Log("No weapon found at index: " + index);
         return null;
     }
 

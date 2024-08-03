@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         gameMenu = gameMenuUI.GetComponent<GameMenu>();
         playerInventory = GetComponent<Inventory>();
-        playerHealth = GetComponent<PlayerHealth>(); 
+        playerHealth = GetComponent<PlayerHealth>();
         if (playerAnim == null)
         {
             playerAnim = GetComponent<Animator>();
@@ -66,6 +66,7 @@ public class PlayerMovement : MonoBehaviour
             MoveCharacter();
             HandleCameraRotation();
             HandlePickup();
+            HandleWeaponEquip();
         }
     }
 
@@ -91,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (characterController.isGrounded)
         {
-            verticalVelocity = 0; 
+            verticalVelocity = 0;
 
             if (Input.GetKey(KeyCode.Space))
             {
@@ -101,11 +102,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            verticalVelocity += gravity * Time.deltaTime; 
+            verticalVelocity += gravity * Time.deltaTime;
         }
-        if (Input.GetMouseButtonDown(0) && playerInventory.weapons.Count != 0)
+
+        if (Input.GetMouseButtonDown(0) && playerInventory.SelectedWeapon != null)
         {
-            // Your code here
             Debug.Log("Attacked");
             isAttacking = true;
             playerAnim.SetTrigger("BB_Attack");
@@ -118,6 +119,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         isAttacking = false;
     }
+
     private void MoveCharacter()
     {
         moveDirection.y = verticalVelocity;
@@ -144,6 +146,8 @@ public class PlayerMovement : MonoBehaviour
             if (Physics.Raycast(ray, out hit, 2f)) // Adjust the distance as needed
             {
                 Weapon weapon = hit.collider.GetComponent<Weapon>();
+                PowerUp powerUp = hit.collider.GetComponent<PowerUp>();
+
                 if (weapon != null && !weapon.isPickedUp)
                 {
                     playerInventory.AddWeapon(weapon);
@@ -151,17 +155,82 @@ public class PlayerMovement : MonoBehaviour
                     EquipWeapon(weapon);
                     Debug.Log("Picked up weapon: " + weapon.name);
                 }
+                else if (powerUp != null)
+                {
+                    ApplyPowerUp(powerUp);
+                    powerUp.PickUp(); // Hide or deactivate the power-up
+                    Debug.Log("Picked up power-up: " + powerUp.name);
+                }
             }
+        }
+    }
+
+    private void HandleWeaponEquip()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            DequipAllWeapons();
+            Debug.Log("Equipping weapon 1");
+            EquipWeapon(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            DequipAllWeapons();
+            Debug.Log("Equipping weapon 2");
+            EquipWeapon(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            DequipAllWeapons();
+            Debug.Log("Equipping Hands");
         }
     }
 
     private void EquipWeapon(Weapon weapon)
     {
-        // Implement the logic to equip the weapon
-        // For simplicity, let's just activate the weapon as a child of the player's hand
-        weapon.transform.SetParent(handTransform);
-        weapon.transform.localPosition = new Vector3(-0.027f, 0.219f, 0.008f);
-        weapon.transform.localRotation = Quaternion.Euler(-10.222f, 349.32f, 525.088f);
-        weapon.gameObject.SetActive(true);
+        if (weapon != null)
+        {
+            if (playerInventory.SelectedWeapon != null && playerInventory.SelectedWeapon != weapon)
+            {
+                playerInventory.SelectedWeapon.gameObject.SetActive(false);
+            }
+
+            weapon.gameObject.SetActive(true);
+            weapon.transform.SetParent(handTransform);
+            weapon.transform.localPosition = new Vector3(-0.027f, 0.219f, 0.008f);
+            weapon.transform.localRotation = Quaternion.Euler(-10.222f, 349.32f, 525.088f);
+
+            playerInventory.SelectedWeapon = weapon; // Set the new weapon as selected
+            Debug.Log("Equipped weapon: " + weapon.weaponName);
+        }
+    }
+
+    private void DequipAllWeapons()
+    {
+        foreach (Weapon weapon in playerInventory.weapons)
+        {
+            if (weapon != null)
+            {
+                weapon.gameObject.SetActive(false); // Deactivate the weapon
+            }
+        }
+        playerInventory.SelectedWeapon = null; // Clear the selected weapon
+        Debug.Log("All weapons have been deactivated.");
+    }
+
+    private void EquipWeapon(int index)
+    {
+        Weapon weaponToEquip = playerInventory.GetWeapon(index);
+        EquipWeapon(weaponToEquip);
+    }
+
+    public void ApplyPowerUp(PowerUp powerUp)
+    {
+        // Find the current selected weapon (if any)
+        Weapon selectedWeapon = playerInventory.SelectedWeapon;
+        if (selectedWeapon != null)
+        {
+            selectedWeapon.IncreaseDamage(powerUp.damageBoost);
+        }
     }
 }
