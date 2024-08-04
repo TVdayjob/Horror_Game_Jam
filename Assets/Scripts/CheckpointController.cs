@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CheckpointController : MonoBehaviour
 {
@@ -8,6 +7,9 @@ public class CheckpointController : MonoBehaviour
     [HideInInspector] public float respawnHP;
     [HideInInspector] public bool gotCheckPoint = false;
     public Transform respawnPoint;
+
+    [Header("Checkpoint UI")]
+    public TextMeshProUGUI checkpointMessageText;
 
     void Start()
     {
@@ -19,12 +21,19 @@ public class CheckpointController : MonoBehaviour
         RespawnIfFall();
     }
 
-    public void SetCheckpoint(Transform newPosition)
+    public void SetCheckpoint(Transform newPosition, string checkpointMessage)
     {
         gotCheckPoint = true;
         respawnPoint = newPosition;
         respawnHP = playerState.playerHP;
         Debug.Log("Checkpoint set at: " + respawnPoint.position + " with HP: " + respawnHP);
+
+        // Set checkpoint message
+        if (checkpointMessageText != null)
+        {
+            checkpointMessageText.text = checkpointMessage;
+            checkpointMessageText.gameObject.SetActive(true);
+        }
     }
 
     private void RespawnIfFall()

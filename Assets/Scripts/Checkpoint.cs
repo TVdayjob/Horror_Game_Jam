@@ -15,17 +15,20 @@ public class Checkpoint : MonoBehaviour
     public float transitionTime = 2f;
 
     public string requiredItem; // Leave empty if no item is required
-    public TextMeshProUGUI messageText;
     public string checkpointMessage;
 
     public NPC npc;
     public string[] newDialogues;
 
+    private CheckpointController checkpointController;
+
     private void Start()
     {
-        if (messageText != null)
+        // Ensure the messageText is hidden at the start
+        CheckpointController checkpointController = FindObjectOfType<CheckpointController>();
+        if (checkpointController != null && checkpointController.checkpointMessageText != null)
         {
-            messageText.gameObject.SetActive(false);
+            checkpointController.checkpointMessageText.gameObject.SetActive(false);
         }
     }
 
@@ -34,10 +37,17 @@ public class Checkpoint : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player entered checkpoint trigger.");
-            DisplayMessage(checkpointMessage);
+
+            checkpointController = other.GetComponent<CheckpointController>();
+            if (checkpointController != null)
+            {
+                // Set the checkpoint and message
+                checkpointController.SetCheckpoint(transform, checkpointMessage);
+            }
 
             Inventory playerInventory = other.GetComponent<Inventory>();
             taskManager = other.GetComponent<TaskManager>();
+
             if (playerInventory != null)
             {
                 bool hasRequiredItem = string.IsNullOrEmpty(requiredItem) || playerInventory.HasItem(requiredItem);
@@ -47,11 +57,11 @@ public class Checkpoint : MonoBehaviour
                     Debug.Log("Player has required item: " + hasRequiredItem);
                     if (string.IsNullOrEmpty(sceneToLoad))
                     {
-                        // Set checkpoint only if there's no scene change
-                        CheckpointController checkpointCont = other.GetComponent<CheckpointController>();
-                        if (checkpointCont != null)
+                        // No scene change, just set the checkpoint
+                        if (checkpointController != null)
                         {
-                            checkpointCont.SetCheckpoint(transform);
+                            checkpointController.SetCheckpoint(transform, checkpointMessage);
+                            StartCoroutine(ClearMessageAfterDelay(3f));
                         }
                     }
                     else
@@ -101,25 +111,26 @@ public class Checkpoint : MonoBehaviour
 
     private void DisplayMessage(string message)
     {
-        if (messageText != null)
+        if (checkpointController != null && checkpointController.checkpointMessageText != null)
         {
-            messageText.gameObject.SetActive(true);
-            messageText.text = message;
-            StartCoroutine(ClearMessageAfterDelay(3f)); // Adjust delay if needed
+            checkpointController.checkpointMessageText.text = message;
+            //checkpointController.checkpointMessageText.gameObject.SetActive(true);
+            StartCoroutine(ClearMessageAfterDelay(3f));
         }
         else
         {
-            Debug.LogWarning("messageText is not assigned.");
+            Debug.LogWarning("CheckpointController or checkpointMessageText is not assigned.");
         }
     }
 
     private IEnumerator ClearMessageAfterDelay(float delay)
     {
+        Debug.Log("Clearing message!!!!!");
         yield return new WaitForSeconds(delay);
-        if (messageText != null)
+        if (checkpointController != null && checkpointController.checkpointMessageText != null)
         {
-            messageText.text = "";
-            messageText.gameObject.SetActive(false);
+            checkpointController.checkpointMessageText.text = "";
+            checkpointController.checkpointMessageText.gameObject.SetActive(false);
         }
     }
 

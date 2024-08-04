@@ -5,27 +5,40 @@ using UnityEngine.UI;
 
 public class NPC : MonoBehaviour, IInteractable
 {
-    [HideInInspector]public float health = 100f;
+    [HideInInspector] public float health = 100f;
     public string interactText;
     public string[] dialogues;
-    public DialogueSystem dialogueSystem;
-    [HideInInspector]public bool isStarted = false;
+    private DialogueSystem dialogueSystem;
+    [HideInInspector] public bool isStarted = false;
     public float rotationSpeed = 2f;
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Ensure the DialogueSystem is set up properly
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            GameObject dialogueManager = player.transform.Find("DialogueManager")?.gameObject;
+            if (dialogueManager != null)
+            {
+                dialogueSystem = dialogueManager.GetComponent<DialogueSystem>();
+            }
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        // Optionally handle any updates needed for NPC here
     }
-
 
     public void Interact(Transform interacterTransform)
     {
+        if (dialogueSystem == null)
+        {
+            Debug.LogWarning("DialogueSystem is not assigned.");
+            return;
+        }
+
         Vector3 direction = (interacterTransform.position - transform.position).normalized;
         direction.y = 0;
         transform.rotation = Quaternion.LookRotation(direction * Time.deltaTime * rotationSpeed);
@@ -33,8 +46,8 @@ public class NPC : MonoBehaviour, IInteractable
         if (!isStarted)
         {
             dialogueSystem.StartDialogue(dialogues);
-            //trigger animation
-            // play sound
+            // Trigger animation
+            // Play sound
             isStarted = true;
         }
         else if (!dialogueSystem.isDone)
@@ -45,7 +58,6 @@ public class NPC : MonoBehaviour, IInteractable
         {
             isStarted = false;
         }
-
     }
 
     public string getInteractText()
