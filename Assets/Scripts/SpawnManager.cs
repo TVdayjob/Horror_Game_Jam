@@ -5,45 +5,80 @@ public class SpawnManager : MonoBehaviour
 {
     public Transform playerSpawnPoint;
 
-    void Start()
+    private static SpawnManager instance;
+
+    public static SpawnManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<SpawnManager>();
+                if (instance == null)
+                {
+                    GameObject go = new GameObject("SpawnManager");
+                    instance = go.AddComponent<SpawnManager>();
+                }
+            }
+            return instance;
+        }
+    }
+
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Debug.Log("Destroying duplicate SpawnManager.");
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
+        instance = this;
+    }
+
+    void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Scene Loaded");  
+        Debug.Log("Scene loaded: " + scene.name);
         PositionPlayer();
     }
 
     void PositionPlayer()
     {
-        Debug.Log("Looking for player");
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        
+        GameObject player = PersistentPlayerManager.Instance.GetPlayerInstance();
 
         if (player != null)
         {
-            Debug.Log("Found player");
+            Debug.Log("Player found.");
+            if (playerSpawnPoint == null)
+            {
+                playerSpawnPoint = GameObject.Find("PlayerSpawnPoint")?.transform;
+            }
+
             if (playerSpawnPoint != null)
             {
-                Debug.Log("Positioning player");
                 player.transform.position = playerSpawnPoint.position;
                 player.transform.rotation = playerSpawnPoint.rotation;
+                Debug.Log("Player positioned at: " + player.transform.position);
             }
             else
             {
-                Debug.LogWarning("PlayerSpawnPoint not found.");
+                Debug.LogWarning("PlayerSpawnPoint not found in the scene.");
             }
         }
         else
         {
-            Debug.LogWarning("Player not found.");
+            Debug.LogWarning("Player object not found.");
         }
-    }
-
-    void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
